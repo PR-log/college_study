@@ -38,4 +38,6 @@ Thu Nov 13 15:17:06 2025
 <img width="1739" height="691" alt="image" src="https://github.com/user-attachments/assets/e1a5fbab-be79-47f7-b91d-30d4c9a1aa42" />
 여기서 맞는 버전 선택하고 커맨드에 나오는 코드 입력하면됨
 
+<img width="2141" height="1371" alt="image" src="https://github.com/user-attachments/assets/3d401e26-c8b7-4227-978e-b915a1a8cae0" />
+
 
