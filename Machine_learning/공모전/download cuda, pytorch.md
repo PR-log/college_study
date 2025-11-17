@@ -40,6 +40,14 @@ Thu Nov 13 15:17:06 2025
 
 <img width="2141" height="1371" alt="image" src="https://github.com/user-attachments/assets/3d401e26-c8b7-4227-978e-b915a1a8cae0" />
 
+프롬스트에서 설치, anaconda 프롬프트 실행
+```
+conda activate img2
+conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
+
+
+```
+
 제대로 설치되었는지 확인
 ```
 import torch
@@ -55,11 +63,5 @@ print("Torch Built With CUDA:", (torch.version.cuda is not None))
 ```
 
 
-프롬스트에서 설치, anaconda 프롬프트 실행
-```
-conda activate img2
-conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
 
-
-```
 
