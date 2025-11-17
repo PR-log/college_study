@@ -64,6 +64,29 @@ print("Torch Built With CUDA:", (torch.version.cuda is not None))
 
 ```
 
+아무리해도 torch에서 cuda 인식이 안됨
+
+그래서 
+torch 지우고 재설치,
+과정중 충돌발생해서 
+가상환경 삭제 후 재생성
+-anaconda prompt-
+```
+conda env list
+#가상환경 목록
+
+conda remove -n img2 --all
+#가상환경 img2 제거
+
+conda create -n img2 python=3.11
+#새로 가상환경 img2 생성
+
+pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu126
+# pytorch 다시 설치
+
+```
+<img width="2241" height="574" alt="image" src="https://github.com/user-attachments/assets/90c6b364-822f-4553-ae92-c4b4483f5d92" />
+정상적으로 인식되는것 확인
 
 
 
