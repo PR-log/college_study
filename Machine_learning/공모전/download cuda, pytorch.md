@@ -55,27 +55,11 @@ print("Torch Built With CUDA:", (torch.version.cuda is not None))
 ```
 
 
-pytorch 지우고 버전바꿔 재설치
+프롬스트에서 설치, anaconda 프롬프트 실행
 ```
-!pip uninstall -y torch torchvision torchaudio
+conda activate img2
+conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
 
-!pip install torch==2.4.0+cu121 torchvision==0.19.0+cu121 torchaudio==2.4.0 --index-url https://download.pytorch.org/whl/cu121 #버전 선택
-
-```
-WARNING: Skipping torch as it is not installed.
-WARNING: Skipping torchvision as it is not installed.
-WARNING: Skipping torchaudio as it is not installed.
-이렇게 출력될 경우
 
 ```
-import sys
-print(sys.executable)
-#실제 pip 설치가 이루어지는 Python 경로 확인.
-
-import sys
-!{sys.executable} -m pip install torch==2.4.0+cu121 torchvision==0.19.0+cu121 torchaudio==2.4.0 --index-url https://download.pytorch.org/whl/cu121
-#커널이 사용 중인 Python에 정확하게 설치
-#Jupyter에서 사용하는 환경과 pip 설치 환경이 엇갈리지 않음.
-```
-
 
