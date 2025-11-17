@@ -40,4 +40,42 @@ Thu Nov 13 15:17:06 2025
 
 <img width="2141" height="1371" alt="image" src="https://github.com/user-attachments/assets/3d401e26-c8b7-4227-978e-b915a1a8cae0" />
 
+제대로 설치되었는지 확인
+```
+import torch
+
+print("CUDA Available:", torch.cuda.is_available())
+print("GPU Count:", torch.cuda.device_count())
+print("Current GPU:", torch.cuda.get_device_name(0) if torch.cuda.is_available() else "None")
+print("Torch CUDA Version:", torch.version.cuda)
+
+# Torch가 CUDA로 빌드되었는지 판단하는 우회 방식
+print("Torch Built With CUDA:", (torch.version.cuda is not None))
+
+```
+
+
+pytorch 지우고 버전바꿔 재설치
+```
+!pip uninstall -y torch torchvision torchaudio
+
+!pip install torch==2.4.0+cu121 torchvision==0.19.0+cu121 torchaudio==2.4.0 --index-url https://download.pytorch.org/whl/cu121 #버전 선택
+
+```
+WARNING: Skipping torch as it is not installed.
+WARNING: Skipping torchvision as it is not installed.
+WARNING: Skipping torchaudio as it is not installed.
+이렇게 출력될 경우
+
+```
+import sys
+print(sys.executable)
+#실제 pip 설치가 이루어지는 Python 경로 확인.
+
+import sys
+!{sys.executable} -m pip install torch==2.4.0+cu121 torchvision==0.19.0+cu121 torchaudio==2.4.0 --index-url https://download.pytorch.org/whl/cu121
+#커널이 사용 중인 Python에 정확하게 설치
+#Jupyter에서 사용하는 환경과 pip 설치 환경이 엇갈리지 않음.
+```
+
 
