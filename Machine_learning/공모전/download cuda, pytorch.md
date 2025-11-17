@@ -35,6 +35,8 @@ Thu Nov 13 15:17:06 2025
 윈도우, 윈도우 버전,  
 로컬 네트워크 상관없음 선택하고 아래 다운로드 눌러서 설치
 
+https://pytorch.org/   
+아래로 스크롤
 <img width="1739" height="691" alt="image" src="https://github.com/user-attachments/assets/e1a5fbab-be79-47f7-b91d-30d4c9a1aa42" />
 여기서 맞는 버전 선택하고 커맨드에 나오는 코드 입력하면됨
 
