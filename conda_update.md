@@ -49,4 +49,6 @@ conda forge 채널에서 최신버전으로 설치
 conda install -n base -c conda-forge conda
 
 ```
-
+그래도 버전은 그대로여서  
+배포판에 최신버전 적용이 안되었을 가능성, 현재 문제 없음  
+그냥 사용하기로 함
