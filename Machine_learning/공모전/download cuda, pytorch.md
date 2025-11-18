@@ -88,5 +88,8 @@ pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu12
 <img width="2241" height="574" alt="image" src="https://github.com/user-attachments/assets/90c6b364-822f-4553-ae92-c4b4483f5d92" />
 정상적으로 인식되는것 확인
 
+<img width="1570" height="773" alt="image" src="https://github.com/user-attachments/assets/bbb3abed-71a0-4dab-abb0-e084223f0996" />
+
+<img width="1589" height="1074" alt="image" src="https://github.com/user-attachments/assets/588561c1-8f3d-4232-a228-cebdb2fbdb04" />
 
 
