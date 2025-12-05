@@ -1177,3 +1177,216 @@ out
 fit = 31.54	평균 예측값
 CI = 30.48 ~ 32.60	평균 오차 범위
 PI = 25.23 ~ 37.85	개별 예측 범위
+
+
+#### 나이(Age)가 임금에 미치는 효과의 최고점(정점)**을 계산
+```
+# 회귀계수 확인
+coef(m_quad)
+
+# 1) 최고점 계산
+# b2 = Age의 계수, b3 = I(Age^2)의 계수
+b2 <- coef(m_quad)["Age"]
+b3 <- coef(m_quad)["I(Age^2)"]
+
+# 임금이 최대가 되는 연령
+age_star <- -b2 / (2 * b3) #꼭짓점 공식
+age_star
+
+###### 시각화
+# 1) 예측용 데이터 생성
+age_seq <- seq(20, 80, 1)
+pred_df <- data.frame(Educ = 16, Age = age_seq)
+pred_df$Wage <- predict(m_quad, newdata = pred_df)
+
+# 2) 실제 데이터 + 회귀곡선
+ggplot() +
+  geom_point(data = df, aes(x = Age, y = Wage), 
+             color = "orange", alpha = 0.6, size = 2) +  # 실제 데이터 점
+  geom_line(data = pred_df, aes(x = Age, y = Wage), 
+            color = "darkgreen", size = 1.3) +  # 회귀 예측 곡선
+  geom_vline(xintercept = -coef(m_quad)["Age"] / (2 * coef(m_quad)["I(Age^2)"]), 
+             linetype = "dashed", color = "red", size = 1) +  # 최고점 표시
+  annotate("text", 
+           x = -coef(m_quad)["Age"] / (2 * coef(m_quad)["I(Age^2)"]) + 2, 
+           y = max(pred_df$Wage),
+           label = paste0("최고 임금 ≈ ", 
+                          round(-coef(m_quad)["Age"] / (2 * coef(m_quad)["I(Age^2)"]), 1), "세"),
+           color = "red", hjust = 0, size = 4.5) +
+  labs(
+    title = "교육연수 16년 근로자의 연령별 임금 (실제 데이터 + 예측곡선)",
+    x = "Age (세)",
+    y = "Hourly Wage ($)"
+  ) +
+  theme_minimal(base_size = 13)
+
+```
+
+### 총총
+```
+# 데이터 구조 확인
+glimpse(df) #str의 더 깔끔한 버전
+summary(df)
+
+# ----------------------------------------------------
+# 3. 로그 변수 추가
+# ----------------------------------------------------
+df <- df %>%
+  mutate(ln_Rent = log(Rent),
+         ln_Sqft = log(Sqft)) 
+
+# 확인
+head(df)
+
+# ----------------------------------------------------
+# 4. 산점도 시각화 
+# ----------------------------------------------------
+# Beds, Baths, Sqft 각각에 대한 Rent 관계 시각화
+p1 <- ggplot(df, aes(x = Beds, y = Rent)) + # 데이터: df, x축: Beds, y축: Rent
+  geom_point(color = "red", size = 2) + # 점찍기, 색은 red, 크기는 2
+  geom_smooth(method = "lm", se = FALSE, color = "blue", linetype="dashed") + # 회귀선, mtehod = 선형회귀, se = FALSE: 회귀선 주변의 신뢰구간 사용 X
+  # 선 색은 파란색 , linetype="dashed" : 점선(dashed line)으로 표시
+  geom_smooth(method = "lm", formula = y ~ exp(x), se = FALSE, color = "green") +
+  labs(title = "Rent vs Beds", x = "Beds", y = "Monthly Rent ($)") # 제목, x축, y축 
+
+p2 <- ggplot(df, aes(x = Baths, y = Rent)) +
+  geom_point(color = "darkorange", size = 2) +
+  geom_smooth(method = "lm", se = FALSE, color = "blue", linetype="dashed") +
+  labs(title = "Rent vs Baths", x = "Baths", y = "Monthly Rent ($)")
+
+p3 <- ggplot(df, aes(x = Sqft, y = Rent)) +
+  geom_point(color = "darkgreen", size = 2) +
+  geom_smooth(method = "lm", se = FALSE, color = "blue", linetype="dashed") +
+  geom_smooth(method = "lm", formula = y ~ log(x), se = FALSE, color = "green") +
+  labs(title = "Rent vs Sqft: Linear vs Logarithmic",
+       x = "Square Feet", y = "Monthly Rent ($)")
+
+gridExtra::grid.arrange(p1, p2, p3, ncol=3)
+
+# ----------------------------------------------------
+# 5. 회귀모형 추정 
+# ----------------------------------------------------
+
+# 모형 1: Rent = Beds + Baths + Sqft
+model1 <- lm(Rent ~ Beds + Baths + Sqft, data = df)
+
+# 모형 2: Rent = Beds + Baths + ln(Sqft)
+model2 <- lm(Rent ~ Beds + Baths + ln_Sqft, data = df)
+
+# 모형 3: ln(Rent) = Beds + Baths + Sqft
+model3 <- lm(ln_Rent ~ Beds + Baths + Sqft, data = df)
+
+# 모형 4: ln(Rent) = Beds + Baths + ln(Sqft)
+model4 <- lm(ln_Rent ~ Beds + Baths + ln_Sqft, data = df)
+
+# ----------------------------------------------------
+# 6. 결과 비교 요약표
+# ----------------------------------------------------
+model_summary <- list(model1, model2, model3, model4) %>%
+  lapply(glance) %>% #각 모델의 요약 통계만 담긴 단일 행 데이터프레임을 반환한다
+  bind_rows(.id = "Model")
+
+print(model_summary %>% select(Model, r.squared, adj.r.squared, sigma, AIC, BIC))
+
+# ----------------------------------------------------
+# 7. 계수 및 유의성 비교
+# ----------------------------------------------------
+tidy_results <- list(
+  Model1 = tidy(model1),
+  Model2 = tidy(model2),
+  Model3 = tidy(model3),
+  Model4 = tidy(model4)
+)
+
+tidy_results  # 로그-로그 모델 계수 확인, 모델 간 비교
+
+# ----------------------------------------------------
+# 8. 특정 조건에서 임대료 예측
+# ----------------------------------------------------
+new_data <- data.frame(Beds = 3, Baths = 2, Sqft = 1600, ln_Sqft = log(1600))
+
+pred1 <- predict(model1, new_data)
+pred2 <- predict(model2, new_data)
+pred3_ln <- predict(model3, new_data) 
+pred4_ln <- predict(model4, new_data)
+
+# 로그모델(3,4)은 편향보정항 s²/2 추가 후 exp() 복원
+s3 <- summary(model3)$sigma
+s4 <- summary(model4)$sigma
+# 로그 모델에서 예측 후 다시 exp()로 되돌릴 때 발생하는 Jensen's Inequality Bias를 보정하기 위해 잔차표준오차 σ 값을 가져온다.
+
+pred3 <- exp(pred3_ln + (s3^2)/2)
+pred4 <- exp(pred4_ln + (s4^2)/2)
+# 로그-변환된 회귀모델의 예측값을 원래 단위($ Rent)로 되돌리는 과정
+
+# 결과 정리
+result <- data.frame(
+  Model = c("Model 1: Rent~Sqft", 
+            "Model 2: Rent~ln(Sqft)", 
+            "Model 3: ln(Rent)~Sqft (bias-corrected)", 
+            "Model 4: ln(Rent)~ln(Sqft) (bias-corrected)"),
+  Predicted_Rent = round(c(pred1, pred2, pred3, pred4), 1)
+)
+
+# 결과 출력
+result
+```
+
+### 로지스틱 회귀모형
+```
+# 로지스틱 회귀모형 적합
+model_logit <- glm(y ~ x1 + x2, data = df, family = binomial(link = "logit")) #family = binomial(link = "logit") : 이 모델이 로지스틱 회귀라는 의미.
+>>>>>>
+> summary(model_logit)
+
+Call:
+glm(formula = y ~ x1 + x2, family = binomial(link = "logit"), 
+    data = df)
+
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)   
+(Intercept) -9.36709    3.19580  -2.931  0.00338 **
+x1           0.13490    0.06401   2.107  0.03508 * 
+x2           0.17822    0.06463   2.758  0.00582 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 41.054  on 29  degrees of freedom
+Residual deviance: 21.835  on 27  degrees of freedom
+AIC: 27.835
+
+Number of Fisher Scoring iterations: 5
+
+# 결과 확인
+summary(model_logit)
+```
+변수	Estimate	의미
+(Intercept)	-9.36709	모든 x가 0일 때 log-odds 값이 매우 낮음 #Intercept: 0.00338 → 모델의 기본 수준 의미 있음
+x1	0.13490	x1이 1만큼 증가할 때 log-odds가 증가 #x1: 0.03508 → 5% 수준에서 통계적으로 유의
+x2	0.17822	x2가 1 증가하면 log-odds가 더 크게 증가 #x2: 0.00582 → 1% 수준에서 강하게 유의
+모델 적합도
+Null deviance: 41.054 → Residual deviance: 21.835
+→ deviance가 감소했으므로 모델이 예측력을 가진다는 의미.
+AIC: 27.835
+→ 낮을수록 좋은 값. 비교 모델이 있다면 더 의미 있어짐.
+
+```
+#승산비
+exp(coef(model_logit))
+# coef(model_logit) : 회귀계수(β₀, β₁, β₂) 추출.
+# exp() : 로그 오즈를 오즈비(Odds Ratio) 로 변환.
+>>>>>
+> exp(coef(model_logit))
+  (Intercept)            x1            x2 
+0.00008549198 1.14441990744 1.19509371519 
+```
+x1이 1 증가하면 사건 발생 확률의 오즈가 약 14.5% 증가
+x2가 1 증가하면 사건 발생 확률의 오즈는 약 19.5% 증가
+오즈가 증가 = 확률이 더 증가
+```
+
+predicted_prob <- predict(model_logit, newdata = new_data, type = "response") #type = "response" : 결과를 0~1 확률값으로 출력
+predicted_prob
+```
