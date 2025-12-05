@@ -982,8 +982,6 @@ new_q4 <- data.frame(GNP = 18000, Quarter = factor(4, levels = c(4,1,2,3)))
 pred_q4 <- predict(fit, newdata = new_q4, interval = "prediction")
 pred_q4
 
-```
-
 Call:
 lm(formula = SAT ~ Income + GPA, data = myData)
 
@@ -1004,7 +1002,7 @@ Multiple R-squared:  0.8649, #결정계수
 Adjusted R-squared:  0.852  #수정 결정계수
 F-statistic: 67.23 on 2 and 21 DF,  
 p-value: 0.000000000744 #유의성: 매우 유의(p < 0.001)
-
+```
 
 상호작용이 있는 회귀모형
 ```
@@ -1342,6 +1340,9 @@ model_logit <- glm(y ~ x1 + x2, data = df, family = binomial(link = "logit")) #f
 Call:
 glm(formula = y ~ x1 + x2, family = binomial(link = "logit"), 
     data = df)
+# glm() : 일반화 선형모형 fitting 함수.
+# y : 종속변수(이진/0-1 값).
+# x1, x2 : 독립변수
 
 Coefficients:
             Estimate Std. Error z value Pr(>|z|)   
@@ -1363,14 +1364,14 @@ Number of Fisher Scoring iterations: 5
 summary(model_logit)
 ```
 변수	Estimate	의미
-(Intercept)	-9.36709	모든 x가 0일 때 log-odds 값이 매우 낮음 #Intercept: 0.00338 → 모델의 기본 수준 의미 있음
-x1	0.13490	x1이 1만큼 증가할 때 log-odds가 증가 #x1: 0.03508 → 5% 수준에서 통계적으로 유의
-x2	0.17822	x2가 1 증가하면 log-odds가 더 크게 증가 #x2: 0.00582 → 1% 수준에서 강하게 유의
-모델 적합도
-Null deviance: 41.054 → Residual deviance: 21.835
-→ deviance가 감소했으므로 모델이 예측력을 가진다는 의미.
-AIC: 27.835
-→ 낮을수록 좋은 값. 비교 모델이 있다면 더 의미 있어짐.
+(Intercept)	-9.36709	모든 x가 0일 때 log-odds 값이 매우 낮음 #Intercept: 0.00338 → 모델의 기본 수준 의미 있음  
+x1	0.13490	x1이 1만큼 증가할 때 log-odds가 증가 #x1: 0.03508 → 5% 수준에서 통계적으로 유의  
+x2	0.17822	x2가 1 증가하면 log-odds가 더 크게 증가 #x2: 0.00582 → 1% 수준에서 강하게 유의  
+모델 적합도  
+Null deviance: 41.054 → Residual deviance: 21.835  
+→ deviance가 감소했으므로 모델이 예측력을 가진다는 의미.  
+AIC: 27.835  
+→ 낮을수록 좋은 값. 비교 모델이 있다면 더 의미 있어짐.  
 
 ```
 #승산비
@@ -1382,11 +1383,116 @@ exp(coef(model_logit))
   (Intercept)            x1            x2 
 0.00008549198 1.14441990744 1.19509371519 
 ```
-x1이 1 증가하면 사건 발생 확률의 오즈가 약 14.5% 증가
-x2가 1 증가하면 사건 발생 확률의 오즈는 약 19.5% 증가
-오즈가 증가 = 확률이 더 증가
+x1이 1 증가하면 사건 발생 확률의 오즈가 약 14.5% 증가  
+x2가 1 증가하면 사건 발생 확률의 오즈는 약 19.5% 증가  
+오즈가 증가 = 확률이 더 증가  
 ```
 
 predicted_prob <- predict(model_logit, newdata = new_data, type = "response") #type = "response" : 결과를 0~1 확률값으로 출력
 predicted_prob
+
+# ① 로지스틱 회귀모형 예측확률
+compare_data$logit_pred <- predict(model_logit, newdata = compare_data, type = "response")
+# model_logit은 logistic regression 모델
+# 각 관측치가 y=1일 가능성을 로지스틱 방식(시그모이드)을 통해 계산한 결과가 logit_pred
+
+# ② 선형확률모형 예측확률
+compare_data$lpm_pred <- predict(model_lpm, newdata = compare_data)
+# model_lpm은 Linear Probability Model (선형회귀 기반 확률 모델)
+# 예측값이 0보다 작거나 1보다 클 수 있다 → 현실적 확률 범위를 넘기도 한다.
+# 독립변수에 대한 해석은 직선적이고 직관적이지만 통계적으로 불안정할 수 있음
+
+# 결과 비교
+compare_data
+```
+
+예제 7.11
+```
+# (1) 로지스틱 회귀모형 적합
+Logistic_Model <- glm(y ~ x1 + x2, family = binomial(link = "logit"), data = myData)
+summary(Logistic_Model)
+
+# (2) 예측 확률 계산
+Pred <- predict(Logistic_Model, type = "response")
+# y = 1 일 확률
+
+# (3) 예측 확률 확인
+head(Pred)
+
+# (4) 0.5 절단값으로 이항 분류
+Binary <- ifelse(Pred >= 0.5, 1, 0)
+# 0.5 기준, 0.5 이상 → 1로 예측, 0.5 미만 → 0으로 예측
+
+# (5) 정확도 계산
+accuracy <- mean(myData$y == Binary) * 100
+accuracy
+#실제 값 y와 예측된 Binary가 동일한 비율을 계산.
+```
+### 교차검증법  
+```
+# 패키지 로드
+
+# 데이터 분할
+set.seed(123) # 시드 고정
+train_index <- sample(1:nrow(df), 150) #무작위로 150개를 훈련(train) 데이터로 사용. 나머지 관측치는 테스트(test) 데이터
+train <- df[train_index, ] #
+test  <- df[-train_index, ]
+
+# 모델 1
+model1 <- lm(Salary ~ Size + Experience + Female + Grad, data=train)
+summary(model1)
+# 모델 2
+model2 <- lm(Salary ~ Size + Experience + Female + Grad +
+               Female*Experience + Female*Grad + Size*Experience, data=train)
+summary(model2)
+# 예측값
+pred1 <- predict(model1, test)
+summ
+pred2 <- predict(model2, test)
+
+# RMSE 계산 함수
+rmse <- function(y, pred){
+  sqrt(mean((y - pred)^2))
+}
+
+rmse1 <- rmse(test$Salary, pred1)
+rmse2 <- rmse(test$Salary, pred2)
+
+rmse1
+rmse2
+# RMSE = 예측값과 실제값 차이의 평균 오차의 크기
+# 값이 작을수록 좋은 모델
+
+```
+
+### 교차검증2  
+```
+set.seed(123)
+train_index <- sample(1:nrow(df), 30)
+train <- df[train_index, ]
+test  <- df[-train_index, ]
+
+# 모델 1
+model1 <- lm(Rent ~ Beds + Baths + log(Sqft), data=train) # 종속변수: Rent
+summary(model1) #설명변수: Beds, Baths, log(Sqft)
+
+# 모델 2
+model2 <- lm(log(Rent) ~ Beds + Baths + log(Sqft), data=train) #Rend를 로그 변환
+summary(model2)
+# 이 모델은 데이터를 정규분포에 가깝게 만들고, 이상치 영향 감소, 비율적 변화 해석 가능 등의 장점이 있어.
+
+# 예측값값
+pred1 <- predict(model1, test)   # Rent 직접 예측
+
+pred2 <- exp(predict(model2, test))  # ln(Rent) 의 예측값을 exp()
+# model2은 log(Rent) 형태로 예측하므로, 예측 결과를 다시 exp() 해서 원래 단위로 되돌림
+
+# RMSE 계산
+rmse <- function(y, pred){
+  sqrt(mean((y - pred)^2))
+}
+
+rmse1 <- rmse(test$Rent, pred1)
+rmse2 <- rmse(test$Rent, pred2)
+rmse1; rmse2
 ```
