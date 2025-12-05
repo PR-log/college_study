@@ -812,6 +812,15 @@ plot(df$Growth, df$Value,
 abline(lm(Value ~ Growth, data = df), col = "red", lwd = 2) #Value를 Growth로 설명하는 선형회귀모형”을 만듭니다.
 # col = 'red' 회귀선의 색상을 빨간색으로 지정, lwd = 2	선 두께(line width)를 2로 설정
 
+#회귀모형 산점도 회귀선
+ggplot(df, aes(x = Experience, y = Salary, color = factor(Female))) + #점과 선의 색깔은 Female 변수에 따라 구분
+  geom_point(alpha = 0.6) + #alpha = 0.6 : 반투명도
+  geom_smooth(method = "lm", se = FALSE, fullrange = TRUE) + #mtehod = lm: 선형회귀 직선 의미
+  #se = FALSe : 회색신뢰구간 숨감, fullrange = TRUE → 데이터 범위를 넘어 x-axis 전체에 선을 유지
+  labs(color = "Female(1=yes)", title = "Salary vs Experience by Gender") +
+  theme_minimal() + #미니멀 디자인 적용
+  xlim(0, 20)
+
 # 상관행렬 히트맵
 install.packages("corrplot")
 library(corrplot)
@@ -1057,3 +1066,114 @@ Pr(>F)	유의확률(p-value)
 p-value 0.02007 < 0.05
 → 상호작용항이 통계적으로 유의미하다.
 즉, Marketing의 효과가 Employed 수준에 따라 다르다.
+
+### 이차식 회귀모형
+```
+# 데이터 없는 상태에서 직접 계산
+b0 <- 10.5225
+b1 <- -0.3073
+b2 <- 0.0210
+
+AC <- function(Output) b0 + b1*Output + b2*Output^2 #함수 AC 만들기
+
+# a. 400만→500만 개
+AC(4); AC(5); AC(5)-AC(4) #;로 나뉘어서 코드 여러개 한번에 실행
+
+# b. 800만→900만 개
+AC(8); AC(9); AC(9)-AC(8)
+
+# c. 최소점 (꼭짓점 구하기)
+x_star <- -b1 / (2*b2)
+x_star
+```
+만든 함수 AC(Output)는 이차식 형태의 평균비용을 계산함.
+AC(4)와 AC(5)를 비교해서 400만 → 500만에서는 평균비용이 약 0.1183 줄어듦.
+반면 800만 → 900만에서는 평균비용이 약 0.0497 늘어남.
+평균비용의 이론적 최소점은 x_star ≈ 7.3167 이고, 이 값이 경계가 되어 감소↔증가가 바뀜.
+
+```
+# 4. 그래프
+library(ggplot2)
+
+ggplot(df, aes(x = Output, y = AC_value)) +
+  geom_line(color = "blue", size = 1.2) +                           # U자형 곡선
+  geom_point(aes(x = 4, y = AC(4)), color = "red", size = 3) +      # 400만
+  geom_point(aes(x = 5, y = AC(5)), color = "red", size = 3) +      # 500만
+  geom_point(aes(x = 8, y = AC(8)), color = "green", size = 3) +    # 800만
+  geom_point(aes(x = 9, y = AC(9)), color = "green", size = 3) +    # 900만
+  geom_point(aes(x = x_star, y = y_star), color = "purple", size = 4) +  # 최소점 표시
+  geom_vline(xintercept = x_star, linetype = "dashed", color = "purple") +
+  geom_text(aes(x = x_star + 0.3, y = y_star + 0.2,
+                label = paste0("최소점 ≈ ", round(x_star,2), " (백만개)")),
+            color = "purple", hjust = 0) +
+  labs(title = "생산량(Output)에 따른 평균비용(AC)",
+       x = "생산량 (백만 개 단위)",
+       y = "평균비용 (달러)") +
+  theme_minimal(base_size = 13)
+
+```
+
+이차식 회귀
+```
+library(readxl)
+library(dplyr)
+
+# 엑셀 파일 불러오기 (경로는 본인 경로로 수정)
+df <- read_excel("jaggia_ba_1e_ch07_Data_Files.xlsx",
+                 sheet = "Wages")
+
+# 데이터 확인
+str(df)
+head(df)
+
+
+#단순선형 회귀모형(직선)
+m_linear <- lm(Wage ~ Educ + Age, data = df)
+summary(m_linear)
+
+#이차식 회귀모형(곡선)
+m_quad <- lm(Wage ~ Educ + Age + I(Age^2), data = df) #나이 제곱(Age²: 비선형 효과 고려) 2차항 모델
+summary(m_quad)
+
+
+#두 모델 비교(적합도 비교)
+# ANOVA 비교
+anova(m_linear, m_quad)
+
+# R^2 비교
+summary(m_linear)$adj.r.squared
+summary(m_quad)$adj.r.squared
+
+# 1) 예측용 데이터
+newdat <- data.frame(
+  Educ = 16,
+  Age  = c(30, 50, 70)
+)
+
+# 2) 점추정 + 95% 신뢰구간
+pred_ci <- predict(m_quad, newdata = newdat, interval = "confidence") #interval = "confidence" : 모형이 추정하는 평균값의 신뢰구간
+
+# 3) 점추정 + 95% 예측구간(개별 관측치 범위)
+pred_pi <- predict(m_quad, newdata = newdat, interval = "prediction") #예측구간(prediction interval), 신뢰구간보다 넓음
+
+# 4) 보기 좋게 결합
+out <- cbind(newdat,
+             fit      = round(pred_ci[, "fit"], 2),
+             lwr_CI   = round(pred_ci[, "lwr"], 2), #신뢰구간의 하한
+             upr_CI   = round(pred_ci[, "upr"], 2), #신뢰구간의 상한
+             lwr_PI   = round(pred_pi[, "lwr"], 2),
+             upr_PI   = round(pred_pi[, "upr"], 2))
+
+out
+
+>>>>>
+  Educ Age   fit lwr_CI upr_CI lwr_PI upr_PI
+1   16  30 25.85  24.69  27.01  19.52  32.18
+2   16  50 31.54  30.48  32.60  25.23  37.85
+3   16  70 26.56  25.33  27.80  20.22  32.91
+
+```
+항목	값
+fit = 31.54	평균 예측값
+CI = 30.48 ~ 32.60	평균 오차 범위
+PI = 25.23 ~ 37.85	개별 예측 범위
