@@ -1496,3 +1496,94 @@ rmse1 <- rmse(test$Rent, pred1)
 rmse2 <- rmse(test$Rent, pred2)
 rmse1; rmse2
 ```
+
+### 맨해튼 거리 구하기
+```
+# 각 점의 좌표를 행렬로 생성
+points <- matrix(c(1, 2, 
+                   4, 6,
+                   6, 3, 
+                   2, 8, 
+                   6, 7), 
+                 ncol = 2, byrow = TRUE)
+
+# 점의 이름 지정
+rownames(points) <- c("A", "B", "C", "D", "E")
+
+points
+
+# 맨해튼 거리 계산 함수
+manhattan_distance <- function(p1, p2) { 
+  sum(abs(p1 - p2))} # |x₁−x₂| + |y₁−y₂|
+
+# 유클리드 거리 계산 함수
+euclidean_distance <- function(p1, p2) {
+  sqrt(sum((p1 - p2)^2))} # 피타고라
+
+# 거리 계산을 위한 초기화
+manhattan_distances <- matrix(NA, nrow = 5, ncol = 5) #5×5 거리 행렬 생성 → 처음에는 NA. 
+euclidean_distances <- matrix(NA, nrow = 5, ncol = 5) #행/열 이름을 점 이름으로 설정하여 보기 좋게 구성.
+
+rownames(manhattan_distances) <- rownames(points)
+colnames(manhattan_distances) <- rownames(points)
+
+rownames(euclidean_distances) <- rownames(points)
+colnames(euclidean_distances) <- rownames(points)
+
+# 거리 계산
+for (i in 1:5) {
+  for (j in 1:5) {
+    if (i != j) {
+      manhattan_distances[i, j] <- manhattan_distance(points[i, ], points[j, ])
+      euclidean_distances[i, j] <- euclidean_distance(points[i, ], points[j, ])
+    }
+  } #(i,j)가 같은 경우 자기 자신이므로 distance 없음 → NA 유지.
+} #나머지는 실제 거리 계산 후 행렬에 저장.
+
+
+# 맨해튼 거리 출력
+cat("맨해튼 거리 행렬:\n")
+print(manhattan_distances)
+
+# 유클리드 거리 출력
+cat("\n유클리드 거리 행렬:\n")
+print(euclidean_distances)
+
+
+# 가장 큰 거리 찾기
+max_manhattan_value <- max(manhattan_distances, na.rm = TRUE)
+max_manhattan_indices <- which(manhattan_distances == max_manhattan_value, arr.ind = TRUE)
+max_manhattan_indices
+
+max_euclidean_value <- max(euclidean_distances, na.rm = TRUE)
+max_euclidean_indices <- which(euclidean_distances == max_euclidean_value, arr.ind = TRUE)
+max_euclidean_indices
+# 가장 큰 거리값을 찾고, 그 위치(row, col)를 인덱스로 반환.
+# arr.ind = TRUE → (i,j) 형태로 matrix 좌표 반환.
+
+# 그래프 시각화
+par(mfrow = c(1, 2))  # 두 개의 그래프를 한 화면에 표시
+
+# 맨해튼 거리 시각화
+plot(points[, 1], points[, 2], pch = 19, col = "blue", xlab = "X", ylab = "Y", main = "Max Manhattan Distance")
+text(points[, 1], points[, 2], labels = rownames(points), pos = 3) #맨해튼 거리는 직선이 아니라 직각 경로로 표현하는 게 특징.
+
+# 맨해튼 거리가 가장 큰 두 점 축을 따라 그리기
+i <- max_manhattan_indices[1, 1]
+j <- max_manhattan_indices[1, 2]
+segments(points[i, 1], points[i, 2], points[j, 1], points[i, 2], col = "red", lty = 2)  # 수평 이동
+segments(points[j, 1], points[i, 2], points[j, 1], points[j, 2], col = "red", lty = 2)  # 수직 이동
+
+# 유클리드 거리 시각화
+plot(points[, 1], points[, 2], pch = 19, col = "blue", xlab = "X", ylab = "Y", main = "Max Euclidean Distance")
+text(points[, 1], points[, 2], labels = rownames(points), pos = 3)
+
+# 유클리드 거리가 가장 큰 두 점 직선으로 그리기
+i <- max_euclidean_indices[1, 1]
+j <- max_euclidean_indices[1, 2]
+segments(points[i, 1], points[i, 2], points[j, 1], points[j, 2], col = "red", lty = 2)
+
+par(mfrow = c(1, 1))  # 그래프 레이아웃 초기화
+
+
+```
