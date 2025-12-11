@@ -80,6 +80,7 @@ library(readxl)
 library(ggplot2)
 library(TTR)
 library(dplyr)
+library(scatterplot3d)
 ```
 
 ```
@@ -270,6 +271,13 @@ plot(iris.2,
 cor(beers, bal) #상관계수 계산
 cor(iris[,1:4]) #4개 변수 간 상관성 분석
 
+# 3D 산점도 그래프
+s3d <- scatterplot3d(mtcars$hp, mtcars$wt, mtcars$mpg, pch = 19, color = "blue",
+                     xlab = "Horsepower", ylab = "Weight", zlab = "MPG")
+# 회귀 평면을 추가합니다
+s3d$plane3d(model)
+
+- - - - - - - -- - - - - - - - - - - - - -- - - - - -- - - - - - - - - - --  -- - - - - - - -- - - - - - - - - - - - - - - -
 #선그래프 작성
 month = 1:12
 late = c(5,8,7,9,4,6,12,13,8,6,6,4)
@@ -1585,5 +1593,146 @@ segments(points[i, 1], points[i, 2], points[j, 1], points[j, 2], col = "red", lt
 
 par(mfrow = c(1, 1))  # 그래프 레이아웃 초기화
 
+```
 
+### 데이터 정규화
+```
+# 주어진 데이터
+data <- c(10, 20, 30, 40, 50)
+
+# 정규화 함수 정의
+normalize <- function(x) {
+  min_val <- min(x)
+  max_val <- max(x)
+  normalized <- (x - min_val) / (max_val - min_val)
+  return(normalized)
+}
+
+# 데이터 정규화
+normalized_data <- normalize(data)
+
+# 정규화된 데이터 출력
+print(normalized_data)
+```
+<img width="468" height="161" alt="image" src="https://github.com/user-attachments/assets/9c9989cc-45c6-43c2-a39a-7f72a33a23c0" />
+
+### 데이터 표준화
+```
+# 주어진 데이터
+data <- c(10, 20, 30, 40, 50)
+
+# 표준화 함수 정의
+standardize <- function(x) {
+  mean_val <- mean(x)
+  std_dev <- sd(x)
+  standardized <- (x - mean_val) / std_dev
+  return(standardized)
+}
+#데이터 값 − 평균" 을 "표준편차"로 나눈 값
+
+# 데이터 표준화
+standardized_data <- standardize(data)
+
+# 표준화된 데이터 출력
+print(standardized_data)
+
+```
+### 최소-최대 정규화(Min-Max normalization)
+```
+# 데이터 생성
+df <- data.frame(
+  Name = c("Jane", "Kevin", "Dolores", "Deshaun", "Mei"),
+  Income = c(125678, 65901, 75550, 110250, 98005),
+  Hours = c(2.5, 10.1, 5.8, 9.0, 7.6)
+)
+
+# 1. 표준화(Z-score)
+df$Income_z <- scale(df$Income) #자동으로 표준화된 값을 만들어줌.
+df$Hours_z <- scale(df$Hours)
+
+# 2. 직접 공식으로 표준화 (교재와 동일 계산)
+mean_income <- mean(df$Income)
+sd_income <- sd(df$Income)
+
+df$Income_z_manual <- (df$Income - mean_income) / sd_income
+
+mean_hours <- mean(df$Hours)
+sd_hours <- sd(df$Hours)
+
+df$Hours_z_manual <- (df$Hours - mean_hours) / sd_hours
+
+# 3. 최소–최대 정규화
+df$Income_minmax <- (df$Income - min(df$Income)) / (max(df$Income) - min(df$Income))
+df$Hours_minmax <- (df$Hours - min(df$Hours)) / (max(df$Hours) - min(df$Hours))
+#최솟값 → 0, 최댓값 → 1, 나머지 값은 0~1 사이의 비율 값으로 변환.
+
+# 4. 함수로 일반화
+minmax <- function(x){ (x - min(x)) / (max(x) - min(x)) } #최소-최대 정규화
+standardize <- function(x){ (x - mean(x)) / sd(x) } # z-점수 표준화 함
+
+df$Income_std <- standardize(df$Income)
+df$Income_norm <- minmax(df$Income)
+
+df
+```
+### 매칭계수 계산 코드
+```
+# 데이터 생성
+df <- data.frame(
+  Student = c(1, 2, 3),
+  Major = c("Business", "Engineering", "Business"),
+  Field = c("MIS", "Electrical", "Accounting"),
+  Sex = c("Female", "Male", "Female"),
+  Dean = c("Yes", "Yes", "No")
+)
+
+# 매칭계수 계산 함수
+matching_coef <- function(x, y) {
+  sum(x == y) / length(x)
+} # 값이 같은 항목의 개수 / 전체 비교한 항목 수 = 일치율(agreement rate)
+
+# 학생 쌍 비교
+mc_12 <- matching_coef(df[1, 2:5], df[2, 2:5])
+mc_13 <- matching_coef(df[1, 2:5], df[3, 2:5])
+mc_23 <- matching_coef(df[2, 2:5], df[3, 2:5])
+
+mc_12; mc_13; mc_23
+
+```
+
+### 분류모형 성능평가
+### 혼동행렬
+```
+# 혼동행렬 값
+TP <- 29   # True Positive
+FP <- 19   # False Positive
+TN <- 133  # True Negative
+FN <- 19   # False Negative
+
+# 정확도
+accuracy <- (TP + TN) / (TP + TN + FP + FN)
+
+# 민감도 Recall
+recall <- TP / (TP + FN)
+
+# 특이도 Specificity
+specificity <- TN / (TN + FP)
+
+accuracy
+recall
+specificity
+```
+
+### 선형회귀 예측 비교 그래프
+```
+ggplot(mtcars, aes(x = mpg, y = predicted_mpg)) +
+  geom_point() +
+  geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "blue") +
+  xlab("Actual MPG") +
+  ylab("Predicted MPG") +
+  ggtitle("Actual vs Predicted MPG")
+#geom_abline(): 직선을 하나 그려주는 함수.
+#intercept = 0 → y절편 0
+#slope = 1 → 기울기 1
+#즉, y = x 직선을 그린 것.
 ```
