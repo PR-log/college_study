@@ -1725,6 +1725,41 @@ mc_23 <- matching_coef(df[2, 2:5], df[3, 2:5])
 
 mc_12; mc_13; mc_23
 
+# 자카드 계수 계산 함수
+jaccard_coef <- function(x, y) {
+  matches <- sum(x == y)      # a
+  mismatches <- sum(x != y)   # b + c
+  return(matches / (matches + mismatches))
+}
+
+# 학생 쌍 비교 (2~5열 비교)
+jc_12 <- jaccard_coef(df[1, 2:5], df[2, 2:5])
+jc_13 <- jaccard_coef(df[1, 2:5], df[3, 2:5])
+jc_23 <- jaccard_coef(df[2, 2:5], df[3, 2:5])
+
+jc_12; jc_13; jc_23
+
+### 마트 구매 자카드 계산
+# 예시 마트 구매 데이터
+df_market <- data.frame(
+  Customer = c("A", "B", "C"),
+  Milk  = c(1, 0, 1),
+  Bread = c(1, 1, 0),
+  Eggs  = c(0, 1, 0),
+  Apple = c(1, 0, 0),
+  Beer  = c(0, 1, 1)
+)
+
+df_market
+
+jaccard_binary <- function(x, y) {
+  a <- sum(x == 1 & y == 1)  # 둘 다 구매
+  b <- sum(x == 1 & y == 0)  # 한쪽만 구매
+  c <- sum(x == 0 & y == 1)  # 한쪽만 구매
+
+  return(a / (a + b + c))
+}
+
 ```
 
 ### 분류모형 성능평가
