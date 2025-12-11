@@ -81,6 +81,7 @@ library(ggplot2)
 library(TTR)
 library(dplyr)
 library(scatterplot3d)
+library(ploty)
 ```
 
 ```
@@ -277,6 +278,32 @@ s3d <- scatterplot3d(mtcars$hp, mtcars$wt, mtcars$mpg, pch = 19, color = "blue",
 # 회귀 평면을 추가합니다
 s3d$plane3d(model)
 
+# 3차원 그래프
+# plotly 패키지를 불러옵니다
+library(plotly)
+
+# mtcars 데이터셋을 사용합니다
+data(mtcars)
+
+# 다중선형회귀 모델을 생성합니다
+model <- lm(mpg ~ hp + wt, data = mtcars)
+
+# 격자(grid) 포인트를 생성합니다
+hp_range <- seq(min(mtcars$hp), max(mtcars$hp), length.out = 30)
+wt_range <- seq(min(mtcars$wt), max(mtcars$wt), length.out = 30)
+grid <- expand.grid(hp = hp_range, wt = wt_range)
+
+# 격자 위의 예측값을 계산합니다
+grid$mpg <- predict(model, newdata = grid)
+
+# plotly를 사용하여 색상이 추가된 3D 산점도와 회귀 평면을 그립니다
+p <- plot_ly(data = mtcars, x = ~hp, y = ~wt, z = ~mpg, type = 'scatter3d', mode = 'markers',
+             marker = list(size = 5, color = ~mpg, colorscale = 'Jet')) %>%
+  add_trace(data = grid, x = ~hp, y = ~wt, z = ~mpg, type = 'mesh3d', opacity = 0.5, #opacity = 불투명
+            colorscale = 'Jet', intensity = ~mpg) #Jet -> 낮은값은 파란색, 높은값은 빨간
+
+# 그래프를 출력합니다
+p
 - - - - - - - -- - - - - - - - - - - - - -- - - - - -- - - - - - - - - - --  -- - - - - - - -- - - - - - - - - - - - - - - -
 #선그래프 작성
 month = 1:12
@@ -1735,4 +1762,174 @@ ggplot(mtcars, aes(x = mpg, y = predicted_mpg)) +
 #intercept = 0 → y절편 0
 #slope = 1 → 기울기 1
 #즉, y = x 직선을 그린 것.
+```
+### 비선형 회귀분석
+```
+# 예제 데이터 생성
+set.seed(123)
+x <- seq(1, 10, by = 0.1)
+y <- 3 * exp(-0.5 * x) + rnorm(length(x), mean = 0, sd = 0.2) #exp(x) = e^x
+#length(x) → x가 91개면 noise 91개 생성
+#mean = 0 → noise 평균은 0
+#sd = 0.2 → noise 크기는 0.2 정도로 작게
+#이 noise는 원래 곡선에 작은 흔들림을 넣어서
+#데이터가 너무 완벽하게 매끈하지 않도록 realistic하게 만들어.
+
+# 데이터 시각화
+plot(x, y, main = "비선형 회귀분석 예제", xlab = "X", ylab = "Y", pch = 16, col = "blue")
+
+# 비선형 회귀 모델 피팅
+nonlinear_model <- nls(y ~ a * exp(b * x), start = list(a = 3, b = -0.5))
+# a, b가 우리가 찾는 파라미터 
+#start: 초기값 지정
+
+# 모델 파라미터 및 통계 정보 출력
+summary(nonlinear_model)
+1) 파라미터 추정값
+a ≈ 3
+b ≈ -0.5
+(노이즈 때문에 약간 차이 날 수 있음)
+
+✔ 2) Residual standard error
+→ 모델이 데이터를 얼마나 잘 설명하는지
+
+✔ 3) Convergence 정보
+→ 비선형 모델이라 수렴 여부도 중요함
+
+✔ 4) Parameter significance
+→ t-test로 a와 b가 의미 있는 계수인지 보여줌
+
+# 시각화
+curve(predict(nonlinear_model, newdata = data.frame(x = x)), add = TRUE, col = "red") #curve: 그래프 위에 새 곡선을 그
+```
+
+### 로지스틱 회귀
+```
+# 'iris' 데이터셋 로딩
+data(iris)
+
+# 데이터셋에서 필요한 변수 추출
+sepal_length <- iris$Sepal.Length
+species <- iris$Species
+
+# 범주형 변수를 이진 변수로 변환 (setosa인 경우 1, 그 외는 0)
+binary_species <- as.numeric(species == "setosa") 
+
+# 로지스틱 회귀 모델 피팅
+logistic_model <- glm(binary_species ~ sepal_length, family = "binomial")
+
+# 모델 요약 출력
+summary(logistic_model)
+
+# 시각화
+plot(sepal_length, binary_species, main = "로지스틱 회귀분석", xlab = "꽃받침 길이", ylab = "setosa 여부", pch = 16, col = "blue")
+curve(predict(logistic_model, data.frame(sepal_length = x), type = "response"), add = TRUE, col = "red")
+
+# 새로운 값 입력
+new_sepal_length <- 5.0
+
+# 예측 수행
+predicted_prob <- predict(logistic_model, newdata = data.frame(sepal_length = new_sepal_length), type = "response")
+
+# 예측 결과 출력
+cat("새로운 꽃받침 길이가", new_sepal_length, "일 때, Setosa일 확률:", predicted_prob, "\n")
+```
+
+### K-최근접 이웃(KNN)
+#### 전체 시계열 예측 파이프라인
+```
+link_info <- read.csv("올림픽대로_link정보.csv", header=T, fileEncoding = "euc-kr")
+olympic_daero_11 <- read.table("olympic-daero_201411.txt")
+str(link_info)
+str(olympic_daero_11)
+
+#3. 수집된 교통정보의 변수명을 아래와 같이 입력하세요. 변수 이름 변경
+#  "Link_Date", "Date", "Link", "Time", "Speed", "Flow", "Occupancy"
+
+names(olympic_daero_11) <- c("Link_Date", "Date", "Link", "Time", "Speed", "Flow", "Occupancy")
+
+#올림픽대로 Link ID == LLL2000110 를 추출하세요.
+olympic_L110 <- filter(olympic_daero_11, Link=="LLL2000110")
+View(olympic_L110)
+
+#올림픽대로 Link ID LLL2000110의 2014년11월30일 속도 데이터를 모른다고 가정하자. 2014년 11월01일 부터 11월29일까지 데이터를 가지고 11월 30일 데이터를 예측해보세요.
+#a. train_date vs. test_date 구분하기
+date_unique <- unique(olympic_L110$Date) #날짜 추출
+train_date <- date_unique[1:29]
+test_date <- date_unique[30]
+train_date
+test_date
+
+#b. 11월30일 데이터 추출
+date_20141130 <- filter(olympic_L110, Date==20141130) #정답 시트
+
+#c. 11월30일 데이터를 예측하기 위해서, 전날인 11월29일 데이터와 가장 유사한 패턴을 가지는 날짜를 찾은 다음, 찾은 날짜의 다음 날짜의 데이터를 가지고 예측에 활용해보자.
+#- 29일 데이터와 가장 유사한 패턴을 가지는 날짜를 추출하기 위해 Euclidean Distance 계산하기
+date_20141129 <- filter(olympic_L110, Date==20141129)#29일 데이터 추출
+
+result <- data.frame()
+for(d in train_date[1:28]){
+  L110_oneday <- filter(olympic_L110, Date==d)
+  Euclidean_distace <- (sum(date_20141129$Speed-L110_oneday$Speed)^2)^0.5
+  result <- rbind(result, c(d,Euclidean_distace))
+}
+
+colnames(result) <- c("date","Euclidean_distace")
+result <- arrange(result,Euclidean_distace)
+result
+
+#clidean Distance 가장 작은 3개의 날짜 추출(k=3)
+# k=3라면
+k_3 <- result$date[1:3]
+k_3
+
+#위에서 추출한 3개 날짜에 대해 시간-속도 그래프를 그려보세요.
+my_plot <- ggplot() +
+  theme_minimal()
+#29일 속도 그래프 그리기
+my_plot <- my_plot + geom_line(data = date_20141129, aes(x = Time, y = Speed), color = "red")
+#3개 날짜에대한 속도 그래프 추가
+for(d in k_3){
+  L110_oneday <- filter(olympic_L110, Date==d)
+  my_plot <- my_plot + geom_line(data = L110_oneday, aes(x = Time, y = Speed))
+}
+my_plot
+
+#추출한 날짜의 다음날 선택
+k_3_pre <- k_3+1
+
+#추출된 3개 날짜의 속도 데이터의 추출하여 중간값 사용 (또는 평균값 사용)
+# k=3라면
+k_3 <- result$date[1:3]
+k_3
+
+k_3_pre <- k_3+1
+
+#선택된 3개 ‘다음날’의 속도를 모아서 평균(또는 중앙값) 으로 예측
+speed_pre <- c()
+for(d in k_3_pre){
+  L110_oneday <- filter(olympic_L110, Date==d)
+  speed_pre_temp <- L110_oneday$Speed
+  speed_pre <- cbind(speed_pre, speed_pre_temp)
+}
+predicted_speed <- apply(speed_pre, 1, mean)
+
+#- 예측된 데이터와 실제 11월30일 속도 데이터 비교하기 (MAPE)
+#    - MAPE는 Mean Absolute Percentage Error의 약자로, 평균 절대 백분율 오차를 의미합니다. 예측값과 실제값의 차이를 절대값으로 변환하여 평균한 후, 이를 백분율로 표현한 것입니다. 이는 예측 모델의 성능을 평가할 때 주로 사용되며, 값이 작을수록 예측 정확도가 높다고 판단할 수 있습니다.
+
+MAPE <- mean(abs(date_20141130$Speed-predicted_speed)/date_20141130$Speed*100)
+MAPE
+
+#그래프 그려서 비교하기
+my_plot <- ggplot() +
+  theme_minimal()
+#29일 속도 그래프 그리기
+my_plot <- my_plot + geom_line(data = date_20141130, aes(x = 1:288, y = Speed), color = "red")
+my_plot <- my_plot + geom_line( aes(x = 1:288, y = predicted_speed), color = "blue") + labs(
+  title = "11월30일 속도 vs. 예측 속도 그래프",
+  x = "시간(5분단위)",
+  y = "속도"
+)
+my_plot
+
 ```
