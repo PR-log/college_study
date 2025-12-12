@@ -847,10 +847,10 @@ plot(df$Growth, df$Value,
 abline(lm(Value ~ Growth, data = df), col = "red", lwd = 2) #Value를 Growth로 설명하는 선형회귀모형”을 만듭니다.
 # col = 'red' 회귀선의 색상을 빨간색으로 지정, lwd = 2	선 두께(line width)를 2로 설정
 
-#회귀모형 산점도 회귀선
+#회귀모형 산점도 회귀선(추세선 추가)
 ggplot(df, aes(x = Experience, y = Salary, color = factor(Female))) + #점과 선의 색깔은 Female 변수에 따라 구분
   geom_point(alpha = 0.6) + #alpha = 0.6 : 반투명도
-  geom_smooth(method = "lm", se = FALSE, fullrange = TRUE) + #mtehod = lm: 선형회귀 직선 의미
+  geom_smooth(method = "lm", se = FALSE, fullrange = TRUE) + #mtehod = lm: 선형회귀 직선 의미 #추세선
   #se = FALSe : 회색신뢰구간 숨감, fullrange = TRUE → 데이터 범위를 넘어 x-axis 전체에 선을 유지
   labs(color = "Female(1=yes)", title = "Salary vs Experience by Gender") +
   theme_minimal() + #미니멀 디자인 적용
