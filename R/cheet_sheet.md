@@ -1511,7 +1511,7 @@ test  <- df[-train_index, ]
 model1 <- lm(Rent ~ Beds + Baths + log(Sqft), data=train) # 종속변수: Rent
 summary(model1) #설명변수: Beds, Baths, log(Sqft)
 
-# 모델 2
+# 모델 2 #지수 회귀 모델, 지수회귀모델
 model2 <- lm(log(Rent) ~ Beds + Baths + log(Sqft), data=train) #Rend를 로그 변환
 summary(model2)
 # 이 모델은 데이터를 정규분포에 가깝게 만들고, 이상치 영향 감소, 비율적 변화 해석 가능 등의 장점이 있어.
