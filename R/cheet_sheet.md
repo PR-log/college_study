@@ -294,7 +294,7 @@ wt_range <- seq(min(mtcars$wt), max(mtcars$wt), length.out = 30)
 grid <- expand.grid(hp = hp_range, wt = wt_range)
 
 # 격자 위의 예측값을 계산합니다
-grid$mpg <- predict(model, newdata = grid)
+grid$mpg <- predict(model, newdata = grid) #check.names = FALSE
 
 # plotly를 사용하여 색상이 추가된 3D 산점도와 회귀 평면을 그립니다
 p <- plot_ly(data = mtcars, x = ~hp, y = ~wt, z = ~mpg, type = 'scatter3d', mode = 'markers',
@@ -969,7 +969,7 @@ residuals(fit)     # 잔차, 각 관측치의 잔차(e = y - ŷ)
 sum(residuals(fit)^2)  #잔차 제곱합(SSE) 계산, 이전 “공식 계산법(Closed-form OLS)”과 동일한 결과여야 함
 
 ## 신뢰구간, 예측
-predict(fit, newdata = data.frame(x = 6), interval = "prediction") #x=6일 때의 예측 점수 계산
+predict(fit, newdata = data.frame(x = 6), interval = "prediction") #x=6일 때의 예측 점수 계산, check.names = FALSE
 #interval = "prediction" : 예측 구간(개별 관측값 예측용)
 #→ 평균 추정 구간을 원하면 "confidence" 사용
 
@@ -1009,12 +1009,12 @@ summary(fit)      # 계수, 유의성, R^2 등
 
 ## 2분기 예측
 new_q2 <- data.frame(GNP = 18000, Quarter = factor(2, levels = c(4,1,2,3)))
-pred_q2 <- predict(fit, newdata = new_q2, interval = "prediction")
+pred_q2 <- predict(fit, newdata = new_q2, interval = "prediction") #check.names = FALSE
 pred_q2
 
 ## 4분기(기준) 예측
 new_q4 <- data.frame(GNP = 18000, Quarter = factor(4, levels = c(4,1,2,3)))
-pred_q4 <- predict(fit, newdata = new_q4, interval = "prediction")
+pred_q4 <- predict(fit, newdata = new_q4, interval = "prediction") #check.names = FALSE
 pred_q4
 
 Call:
@@ -1180,7 +1180,8 @@ summary(m_quad)$adj.r.squared
 # 1) 예측용 데이터
 newdat <- data.frame(
   Educ = 16,
-  Age  = c(30, 50, 70)
+  Age  = c(30, 50, 70),
+check.names = FALSE
 )
 
 # 2) 점추정 + 95% 신뢰구간
@@ -1229,7 +1230,7 @@ age_star
 ###### 시각화
 # 1) 예측용 데이터 생성
 age_seq <- seq(20, 80, 1)
-pred_df <- data.frame(Educ = 16, Age = age_seq)
+pred_df <- data.frame(Educ = 16, Age = age_seq, check.names = FALSE)
 pred_df$Wage <- predict(m_quad, newdata = pred_df)
 
 # 2) 실제 데이터 + 회귀곡선
@@ -1336,7 +1337,7 @@ tidy_results  # 로그-로그 모델 계수 확인, 모델 간 비교
 # ----------------------------------------------------
 # 8. 특정 조건에서 임대료 예측
 # ----------------------------------------------------
-new_data <- data.frame(Beds = 3, Baths = 2, Sqft = 1600, ln_Sqft = log(1600))
+new_data <- data.frame(Beds = 3, Baths = 2, Sqft = 1600, ln_Sqft = log(1600), check.names = FALSE)
 
 pred1 <- predict(model1, new_data)
 pred2 <- predict(model2, new_data)
@@ -1358,7 +1359,9 @@ result <- data.frame(
             "Model 2: Rent~ln(Sqft)", 
             "Model 3: ln(Rent)~Sqft (bias-corrected)", 
             "Model 4: ln(Rent)~ln(Sqft) (bias-corrected)"),
-  Predicted_Rent = round(c(pred1, pred2, pred3, pred4), 1)
+  Predicted_Rent = round(c(pred1, pred2, pred3, pred4), 1),
+check.names = FALSE
+
 )
 
 # 결과 출력
@@ -1670,7 +1673,8 @@ print(standardized_data)
 df <- data.frame(
   Name = c("Jane", "Kevin", "Dolores", "Deshaun", "Mei"),
   Income = c(125678, 65901, 75550, 110250, 98005),
-  Hours = c(2.5, 10.1, 5.8, 9.0, 7.6)
+  Hours = c(2.5, 10.1, 5.8, 9.0, 7.6),
+check.names = FALSE
 )
 
 # 1. 표준화(Z-score)
@@ -1710,7 +1714,8 @@ df <- data.frame(
   Major = c("Business", "Engineering", "Business"),
   Field = c("MIS", "Electrical", "Accounting"),
   Sex = c("Female", "Male", "Female"),
-  Dean = c("Yes", "Yes", "No")
+  Dean = c("Yes", "Yes", "No"),
+check.names = FALSE
 )
 
 # 매칭계수 계산 함수
@@ -1747,7 +1752,8 @@ df_market <- data.frame(
   Bread = c(1, 1, 0),
   Eggs  = c(0, 1, 0),
   Apple = c(1, 0, 0),
-  Beer  = c(0, 1, 1)
+  Beer  = c(0, 1, 1),
+check.names = FALSE
 )
 
 df_market
@@ -1858,13 +1864,13 @@ summary(logistic_model)
 
 # 시각화
 plot(sepal_length, binary_species, main = "로지스틱 회귀분석", xlab = "꽃받침 길이", ylab = "setosa 여부", pch = 16, col = "blue")
-curve(predict(logistic_model, data.frame(sepal_length = x), type = "response"), add = TRUE, col = "red")
+curve(predict(logistic_model, data.frame(sepal_length = x, check.names = FALSE), type = "response"), add = TRUE, col = "red")
 
 # 새로운 값 입력
 new_sepal_length <- 5.0
 
 # 예측 수행
-predicted_prob <- predict(logistic_model, newdata = data.frame(sepal_length = new_sepal_length), type = "response")
+predicted_prob <- predict(logistic_model, newdata = data.frame(sepal_length = new_sepal_length, check.names = FALSE), type = "response")
 
 # 예측 결과 출력
 cat("새로운 꽃받침 길이가", new_sepal_length, "일 때, Setosa일 확률:", predicted_prob, "\n")
