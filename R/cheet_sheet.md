@@ -1974,3 +1974,18 @@ my_plot <- my_plot + geom_line( aes(x = 1:288, y = predicted_speed), color = "bl
 my_plot
 
 ```
+
+### 선형확률모형 정확도 계산
+```
+pred_prob_lpm <- predict(m1)
+pred_class_lpm <- ifelse(pred_prob_lpm >= 0.5, 1, 0)
+accuracy_lpm <- mean(pred_class_lpm == df$Stay)
+accuracy_lpm
+```
+### 로지스틱 회귀모형 정확도 계산
+```
+pred_prob_logit <- predict(m2, type = "response")
+pred_class_logit <- ifelse(pred_prob_logit >= 0.5, 1, 0)
+accuracy_logit <- mean(pred_class_logit == df$Stay)
+accuracy_logit
+```
