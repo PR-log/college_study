@@ -1274,7 +1274,7 @@ head(df)
 # ----------------------------------------------------
 # 4. 산점도 시각화 
 # ----------------------------------------------------
-# Beds, Baths, Sqft 각각에 대한 Rent 관계 시각화
+# Beds, Baths, Sqft 각각에 대한 Rent 관계 시각화, 추세선 추가
 p1 <- ggplot(df, aes(x = Beds, y = Rent)) + # 데이터: df, x축: Beds, y축: Rent
   geom_point(color = "red", size = 2) + # 점찍기, 색은 red, 크기는 2
   geom_smooth(method = "lm", se = FALSE, color = "blue", linetype="dashed") + # 회귀선, mtehod = 선형회귀, se = FALSE: 회귀선 주변의 신뢰구간 사용 X
