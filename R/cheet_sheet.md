@@ -286,7 +286,7 @@ library(plotly)
 data(mtcars)
 
 # 다중선형회귀 모델을 생성합니다
-model <- lm(mpg ~ hp + wt, data = mtcars)
+model <- lm(mpg ~ hp + wt, data = mtcars) # 반응변수 y, 예측변수 x
 
 # 격자(grid) 포인트를 생성합니다
 hp_range <- seq(min(mtcars$hp), max(mtcars$hp), length.out = 30)
