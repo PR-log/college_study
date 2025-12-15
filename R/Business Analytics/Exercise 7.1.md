@@ -65,3 +65,19 @@ b. x1= = 24와 x2는 20과 30일 때 y를 계산하라
 ```
 predict_y(x1 = 24, x2 = c(20,30))
 ```
+### 4.
+Exercise_7.4. 첨부된 데이터 파일은 반응변수 y와 예측변수들 x, d1, d2에 대한 20개의 관측치를 포함하고 있다.
+a. 예측변수들 x, d1, d2를 가진 회귀모형을 추정하고 이어서 상호작용변수들 d1d2를 포함하기 위해 이 모형을 확장하라.
+```
+m1 <- lm(y ~ d1 + d2, data=df)
+m2 <- lm(y ~ d1 + d2 + d1 * d2, data=df)
+```
+b. 선호되는 모형을 사용하여 x = 20, d1 = 1이고 d2가 0과 1일 때 y를 계산하라.
+```
+summary(m1) #Adjusted R-squared:  0.2553, p-value: 0.0317
+summary(m2) #Adjusted R-squared:  0.2421, p-value: 0.06031
+#R-squared는 차이가 크지 않지만 p-value가 m1이 더 좋아서 m1 사용
+
+predict(m1, newdata = data.frame(x = 20, d1 = 1, d2 = 0))
+predict(m1, newdata = data.frame(x = 20, d1 = 1, d2 = 1))
+```
