@@ -37,7 +37,8 @@ predict_y <- function(x, d) {
 
 predict_y(x = 10, d = 1)
 
-````b. x=10과 d=0일 때 y를 계산하라.
+```
+b. x=10과 d=0일 때 y를 계산하라.
 ```
 predict_y(x = 10, d1 = 0)
 
