@@ -215,8 +215,29 @@ c. 학사학위가 모바일 기기 사용시간에 미치는 영향을 논의�
 College        20.4745    11.3455   1.805              0.07514
 학사학위가 있으면 모바일 기기 사용시간이 약20.4 증가한다. 하지만 10% 수준에서 유의함으로 통계적으로 약하지만 무시할 수 없는 정도이다.
 ```
-
-
+### 11.
+Urban. 한 사회학자는 미국에 사는 가족의 소비지출(Consumption, 달러)과 가족소득(Income, 달러), 가족이 도시 또는 농촌 지역에 사느냐 여부 (Urban:도시에 살면 1, 그렇지 않으면 0)의 관계를 검토하고 있다.
+그녀는 미국 전역에 사는 50명의 가족에 대한 데이터를 수집하였다. 이러한 데이터의 일부가 다음의 표에 제시되어 있다.
+a. Consumption = b0 + b1Income + e. 소득이 75,000 달러인 가족의 예측되는 소비지출을 계산하라.
+``` 
+m1 <- lm(Consumption ~ Income, data = df)
+predict(m1, newdata = data.frame(Income = 75,000)) #8201.48
+```
+b. 도시지역과 농촌지역에 사는 소득이 75,000 달러인 가족의 소비지출을 예측하기 위해 Urban 더미변수를 포함시켜라.
+```
+m2 <- lm(Consumption ~ Income + Urban, data = df)
+```
+c. 도시지역과 농촌지역이 사는 소득이 75,000달러인 가족의 소비지출을 예측하기 위해 Urban 더미변수와 상호작용변수(Incone * Urban)를 포함시켜라
+```
+m3 <- lm(Consumption ~ Income + Urban + Income * Urban, data = df)
+```
+d. 위의 모형들 중에서 어느 모형이 데이터에 가장 적합한가? 설명하라.
+```
+summary(m1) #Adjusted R-squared:  0.5806 
+summary(m2) #Adjusted R-squared:  0.6006
+summary(m3) #Adjusted R-squared:  0.6333
+# 마지막 모형이 가장 적합하다
+```
 
 
 
