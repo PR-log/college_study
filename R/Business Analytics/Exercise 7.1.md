@@ -113,3 +113,24 @@ summary(m2) #Adjusted R-squared:  0.6559, p-value: 0.0001431
 predict(m2, newdata = data.frame(x1 = 30, x2 = 10))
 predict(m2, newdata = data.frame(x1 = 30, x2 = 20))
 ```
+298pg
+### 7.
+Overweight 미국 보건복지무(U.S Department of Health and Human Services)에 의하면, 미국에서 흑인 여성들은 다른 그룹과 비교하여 과체중 비율이 가장 높다.
+은 체질량지수(BMI)가 25 이상이면 과체중으로 여겨진다. 120명으로부터 데이터가 수집되었다. 다음의 표는 개인의 BMI, Female 더미변수(Female: 여성이면 1, 그렇지 않으면 0), Black 더미변수(Black: 흑인이면1, 그렇지 않으면 0)에 대한 데이터의 일부를 보여준다.
+a. 백인 남성, 백인 여성, 흑인 여성의 BMI를 예측하기 위해 회귀모형 BMI = b0 + b1Female + b2Black + b3(Female * black) ε을 추정하라.
+```
+df <- read_excel("jaggia_ba_1e_data_files/jaggia_ba_1e_ch07_Data_Files.xlsx", sheet = "Overweight")
+m1 <- lm(BMI ~ Female + +Black + Female * Black, data = df)
+```
+b. 5%의 수준에서 백인 여성과 백인 남성 간 차이가 통계적으로 유의한가?
+```
+summary(m1)
+# Female        -3.4456     0.6079  -5.668      0.0000001073081 ***
+# p value가 0.05보다 낮기 때문에 유의하다고 볼 수 있다.
+```
+c. 5%의 수준에서 백인 남성과 흑인 남성 간 차이가 통계적으로 유의한가?
+```
+#Black         -1.3139     0.4332  -3.033              0.00299
+# p value < 0.05 -> 유의함
+```
+### 8.
