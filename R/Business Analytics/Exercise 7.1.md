@@ -160,3 +160,29 @@ predict(m2, newdata = data.frame(Female = 1, `Minor Male` = 0))
 predict(m2, newdata = data.frame(Female = 1, `Minor Male` = 1))
 
 ```
+### 9.
+IceCream, 한 최근의 서베이에서 오하이오 주의 신 시내티에 있는 아이스크림 트럭 운전사들은 전형적인 여름 하루에 약 280달러를 번다고 보고하였다.   
+이러한 수입은 일 반적으로 근무시간이 더 긴 날, 특히 더운 날과 휴일에 더 높 다. 이르마는 5주 동안 한 아이스크림 트럭 운전사를 따라다 냈다.  
+그녀는 이 운전사의 일일 수입(Income), 도로상에 있 는 시간(Hours), 특별히 더운 날인지 여부(Hot: 화씨 80도가 넘으면 1, 그렇지 않으면 0), 휴일인지 여부(Holiday: 휴일이 면 1, 그렇지 않으면 0)에 대한 데이터를 수집하였다. 이러한 데이터의 일부가 다음의 표에 제시되어 있다.  
+a. Income에 대한 Hours, Hot, Holiday의 효과를 추정하고 해석하라. 더운 휴일날에 6시간 일한 운전사의 수입을 예측하라.
+```
+m1 <- lm(Income ~ Hours + Hot + Holiday, data=df)
+summary(m1)
+>>>
+Coefficients:
+  Estimate Std. Error t value    Pr(>|t|)    
+(Intercept)   -1.449     30.762  -0.047    0.962729    
+Hours         32.023      4.329   7.397 0.000000025 ***
+  Hot           90.508     12.659   7.150 0.000000049 ***
+  Holiday       54.094     13.091   4.132    0.000253 ***
+#수입이 도로상에 있는 시간 1시간마다 32씩, 화씨 80이 넘으면90.5, 휴일이면 54 만큼 상승한다
+
+predict(m1, newdata = data.frame(Hours = 6, Hot = 1, Holiday = 1))
+# 335.2886 
+```
+b. Hot과 Holiday 간 상호작용변수를 포함하도록 위의 모형을 확장하라. 더운 휴일날에 6시간 일한 운전사의 수입을 예측하라. 휴일날이 아닐 때 이 운전사의 수입을 예측하라.
+```
+m2 <- lm(Income ~ Hours + Hot + Holiday + Hot * Holiday, data=df)
+predict(m1, newdata = data.frame(Hours = 6, Hot = 1, Holiday = 1)) #354.8029
+predict(m1, newdata = data.frame(Hours = 6, Hot = 1, Holiday = 0)) #268.8348
+```
