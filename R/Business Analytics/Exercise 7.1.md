@@ -238,6 +238,32 @@ summary(m2) #Adjusted R-squared:  0.6006
 summary(m3) #Adjusted R-squared:  0.6333
 # 마지막 모형이 가장 적합하다
 ```
+### 12.
+Pick_Errors. 한 온라인 소매업체의 배송센터는 약간의 "선택 실수"(예를 들면, 잘못된 품목을 검색하는 것)를 경험하고 있다.
+종업원의 연간 실수 건수(Errors), 근무연수(Exper, 년)와 종업원이 훈련프로그램에 참석했는지 여부(Training: 종업원이 훈련프로그램을 참석했으면 1, 그렇지 않으면 0)에 대한 정보가 수집되었다.
+a. 다음과 같은 2개의 모형을 추정하라.
+   Errors = b0 + b1Exper + b2Train + e와
+   Errors = b0 + b1Exper + b2Train + b3(Exper * Train) +e
+```
+m1 <- lm(Errors ~ Exper + Train, data=df)
+m2 <- lm(Errors ~ Exper + Train + Exper * Train, data=df)
+```
+b. 조정 R^2와 5% 수준에서 예측변수들의 유의성 기준에 의하면, 어느 모형이 더 양호한 적합도를 제공하는가?
+```
+summary(m1)  #Adjusted R-squared:  0.5621, p-value: 0.000005488
+summary(m2)  #Adjusted R-squared:  0.6035, p-value: 0.000004955
+# R^2와 p-value 모두 상호작용이 있는 회귀모델이 더 양호한 적합도를 제공한다
+```
+c. 선택된 모형을 사용하여 훈련프로그램에 참석했던 10년의 근무연수를 가진 종업원의 선택 실수 건수를 예측하라.
+```
+predict(m2, newdata = data.frame(Train = 1, Exper = 10)) #12.45911
+```
+d. 양의 상호작용변수 계수 추정치에 대한 실용적인 해석을 제시하라
+```
+Exper:Train   0.9785     0.5007   1.954        0.0615 .
+훈련 받은 사람에게서 경력에 따른 실수의 변화가 증가하지만 수치가 낮고 유의확률도 10%정도에서 유의하므로 비용을 생각했을 때
+훈련 효과를 무시하거나 우선도를 낮춰도 된다
+```
 
 
 
