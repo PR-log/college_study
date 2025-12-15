@@ -81,3 +81,20 @@ summary(m2) #Adjusted R-squared:  0.2421, p-value: 0.06031
 predict(m1, newdata = data.frame(x = 20, d1 = 1, d2 = 0))
 predict(m1, newdata = data.frame(x = 20, d1 = 1, d2 = 1))
 ```
+### 5.
+Exercise_7.5. 첨부된 데이터 파일은 반응변수 y와 예측변수들 x와 d를 가진 회귀모형을 추정하고 이어서 상호작용변수 xd를 포함하기 위해 이 모형을 확장하라.
+a. 예측변수들 x 와 d를 가진 회귀모형을 추정하고 이어서 상호작용변수 xd를 포함하기 위해 이 모형을 확장하라.
+```
+m1 <- lm(y ~ x + d, data=df)
+m2 <- lm(y ~ x + d + x * d, data=df)
+```
+b. 선호되는 모형을 사용하여 x = 15이고 d가 0과 1일 때 y을 계산하라.
+```
+summary(m1) #Adjusted R-squared:  0.4184 , p-value:0.003881
+summary(m2) #Adjusted R-squared:  0.5578, p-value: 0.001008
+#R-squared, p-value 모두 m2가 우세
+
+predict(m2, newdata = data.frame(x = 15, d = 0))
+predict(m2, newdata = data.frame(x = 15, d = 1))
+```
+
