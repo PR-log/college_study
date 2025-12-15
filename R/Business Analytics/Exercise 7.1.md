@@ -97,4 +97,19 @@ summary(m2) #Adjusted R-squared:  0.5578, p-value: 0.001008
 predict(m2, newdata = data.frame(x = 15, d = 0))
 predict(m2, newdata = data.frame(x = 15, d = 1))
 ```
+### 6.
+Exercise_7.6. 첨부된 데이터 파일은 반응변수 y와 예측변수들 x1과 x2에 대한 20개의 관측치를 포함하고 있다.
+a. 예측변수들 x1과 x2를 가진 회귀모형을 추정하고 이어서 상호작용변수 x1x2를 포함하기 위해 이 모형을 확장하라.
+```
+m1 <- lm(y ~ x1 + x2, data=df)
+m2 <- lm(y ~ x1 + x2 + x1 * x2, data=df)
+```
+b. 선호되는 모형을 사용하여 x1 = 30이고 x2가 10과 20일 때 y를 계산하라.
+```
+summary(m1) #Adjusted R-squared:  0.5896 , p-value:0.0002002
+summary(m2) #Adjusted R-squared:  0.6559, p-value: 0.0001431
+#R-squared, p-value 모두 m2가 우세
 
+predict(m2, newdata = data.frame(x1 = 30, x2 = 10))
+predict(m2, newdata = data.frame(x1 = 30, x2 = 20))
+```
