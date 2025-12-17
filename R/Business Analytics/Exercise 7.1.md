@@ -315,4 +315,22 @@ predict(m1, newdata = data.frame(Profit = 4800000, Years = 15, Grad = 1, Comp = 
 ```
 ### 15.
 IPO. 신규상장(IPO)가격에 관한 이론들 중 하나는 신규상장 시 최초수익률(공모가격으로부터 상장 시초가격의 퍼센트 변화)은 가격수정(공모전 가격으로부터 공모가격의 퍼센트 변화)에 의존한다는 것이다.
+최초수익률에 영향을 줄 수 있는 다른 요인은 하이테크 기업이면 1이고 그렇지 않으면 0인 더미변수이다.
+a. 반응변수가 최초수익률이고 예측변수가 가격수정과 하이테크 더미변수인 회귀모형을 추정하라.
+```
+m1 <- lm(`Initial Return` ~ `Price Revision` + `High Tech`, data=df)
+```
+b. 예측변수로 가격수정, 하이테크 더미변수, 하이테크 더미변수와 가격수정 간 상호작용변수를 가진 회귀모형을 다시 추정하라.
+```
+m2 <- lm(`Initial Return` ~ `Price Revision` + `High Tech` + `Price Revision` * `High Tech`, data=df)
+```
+c. 어느 모형이 선호되는 모형인가? 설명하라. 이 모형을 사용하여 15%의 가격 수정을 가지는 하이테크 기업의 최추 수익률을 추정하라. 하이테크 기업이 아닌 기업의 최초 수익률을 계산하라.
+```
+summary(m1) #Adjusted R-squared:  0.1585, p-value: 0.00000000006133
+summary(m2) #Adjusted R-squared:  0.1571, p-value: 0.0000000002706
+# R-squared와 p-value 모두 m1 모델이 더 성능이 좋다
 
+predict(m2, newdata = data.frame(`Price Revision` = 15, `High Tech` = 0, check.names = FALSE)) #11.32477
+```
+### 16.
+-
