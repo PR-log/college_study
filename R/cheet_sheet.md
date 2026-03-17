@@ -61,11 +61,17 @@ d[2:3]
 ```
 getwd() #pwd
 setwd("C:/Users/jeehe/Downloads") #change pwd
+# 현재 디렉터리 파일 목록 확인
+list.files()
 ```
 
 
 ```
 read.csv("airquality.csv") #csv파일 불러오기
+a <- read.csv("detector.csv", header=TRUE, stringsAsFactors=FALSE) 
+# header = TRUE: 첫 번째 행을 컬럼 이름으로 사용한다는 의미
+# stringsAsFactors = FALSE: 문자형 데이터를 factor로 자동 변환하지 않도록 설정
+
 View(airquality) #불러온 파일 보기, V 대문자
 airquality_data <-read.csv("airquality.csv")
 write.csv(airquality_data, file = "airquality_new.csv") # 데이터를 csv 파일로 저장
@@ -661,6 +667,9 @@ summary(data)
 quantile(data)
 fivenum(data) # 다섯 가지 요약 통계량 제공
 # 최솟값, 1st quartile, median, 3rd quartile, maximun
+
+#특이값, 이상치 처리
+
 
 #이상치 제거하기
 data_box <- boxplot(data)
