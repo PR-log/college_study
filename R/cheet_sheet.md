@@ -1853,6 +1853,17 @@ b ≈ -0.5
 curve(predict(nonlinear_model, newdata = data.frame(x = x)), add = TRUE, col = "red") #curve: 그래프 위에 새 곡선을 그
 ```
 
+#다항회귀분석
+```
+model3 <- lm(mpg ~ poly(hp, 2), data = mtcars)
+model4 <- lm(mpg ~ poly(hp, 3), data = mtcars)
+```
+poly(hp, k) → hp를 k차 다항식으로 변환
+model3 → 2차 곡선 (quadratic)
+model4 → 3차 곡선 (cubic)
+<img width="699" height="160" alt="image" src="https://github.com/user-attachments/assets/2550aff7-1039-4829-98ef-77879b9f8e73" />
+
+
 ### 로지스틱 회귀
 ```
 # 'iris' 데이터셋 로딩
