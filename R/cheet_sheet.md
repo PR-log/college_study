@@ -964,20 +964,6 @@ legend("topleft",
        bty = "n") #테두리 없앰
 
 #단순선형회귀
-
-#가상의 데이터 생성
-set.seed(123) #재현 가능성 확보
-
-study_time <- seq(1, 10, by=1) #공부시간 1~ 10시간
-score <- 5 * study_time + rnorm(10, mean=0, sd=3) #평균0, 표준편차 3인 노이즈 추가
-```
-<img width="696" height="192" alt="image" src="https://github.com/user-attachments/assets/427377a8-49eb-4369-b9f6-5533069a2211" />    
-
-```
-
-
-
-
 ## 데이터프레임
 df <- data.frame(x, y)
 
