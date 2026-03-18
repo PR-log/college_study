@@ -1862,6 +1862,13 @@ poly(hp, k) → hp를 k차 다항식으로 변환
 model3 → 2차 곡선 (quadratic)
 model4 → 3차 곡선 (cubic)
 <img width="699" height="160" alt="image" src="https://github.com/user-attachments/assets/2550aff7-1039-4829-98ef-77879b9f8e73" />
+### 그래프로 보기  
+```
+plot(mtcars$hp, mtcars$mpg)
+lines(sort(mtcars$hp), fitted(model3)[order(mtcars$hp)], col="blue")
+lines(sort(mtcars$hp), fitted(model4)[order(mtcars$hp)], col="red")
+```
+
 
 
 ### 로지스틱 회귀
