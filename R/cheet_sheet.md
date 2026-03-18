@@ -57,6 +57,10 @@ data_clean %>% arrange(desc(score))
 ```
 d[2:3]
 ```
+각 변수(column)의 데이터 타입을 한 번에 출력  
+```
+sapply(data_raw, class)
+```
 
 ```
 getwd() #pwd
