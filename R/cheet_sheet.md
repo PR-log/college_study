@@ -2053,7 +2053,7 @@ test_y <- test_data$Species #테스트 데이터의 클래스 (정답 라벨)
 # KNN 모델 (K=3)
 predicted_classes <- knn(train=train_x,
                          test = test_x,
-                         cl = train_y,
+                         cl = train_y, #정답 라벨 (클래스)
                          k = 3)
 
 # 모델평가
