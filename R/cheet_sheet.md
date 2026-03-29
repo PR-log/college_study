@@ -2059,3 +2059,44 @@ predicted_classes <- knn(train=train_x,
 # 모델평가
 confusionMatrix(predicted_classes, test_y)
 ```
+confusionMatrix(predicted_classes, test_y)
+Confusion Matrix and Statistics
+
+            Reference (실제값)
+ (예측값)
+Prediction   setosa versicolor virginica
+  setosa         10          0         0
+  versicolor      0         10         2
+  virginica       0          0         8
+
+Overall Statistics
+                                          
+               Accuracy : 0.9333          #전체 성능, 정확도
+                 95% CI : (0.7793, 0.9918) 
+    No Information Rate : 0.3333          #정보 없이 찍었을 때 성능
+    P-Value [Acc > NIR] : 8.747e-12       
+                                          
+                  Kappa : 0.9             #진짜 성능, 0.8이상이면 매우 좋음
+                                          
+ Mcnemar's Test P-Value : NA              
+
+Statistics by Class:
+
+                     Class: setosa                             Class: versicolor
+Sensitivity                 1.0000      #전부 잘 맞춤           1.0000  #전부 잘 맞춤
+Specificity                 1.0000      #다른것도 잘 구분       0.9000  #일부 틀림
+Pos Pred Value              1.0000                             0.8333
+Neg Pred Value              1.0000                             1.0000
+Prevalence                  0.3333                             0.3333
+Detection Rate              0.3333                             0.3333
+Detection Prevalence        0.3333                             0.4000
+Balanced Accuracy           1.0000                             0.9500
+                     Class: virginica
+Sensitivity                    0.8000 #실제 virginica 20% 놓침
+Specificity                    1.0000 
+Pos Pred Value                 1.0000
+Neg Pred Value                 0.9091
+Prevalence                     0.3333
+Detection Rate                 0.2667
+Detection Prevalence           0.2667
+Balanced Accuracy              0.9000
