@@ -2092,11 +2092,13 @@ Detection Rate              0.3333                             0.3333
 Detection Prevalence        0.3333                             0.4000
 Balanced Accuracy           1.0000                             0.9500
                      Class: virginica
-Sensitivity                    0.8000 #실제 virginica 20% 놓침
-Specificity                    1.0000 
-Pos Pred Value                 1.0000
-Neg Pred Value                 0.9091
-Prevalence                     0.3333
-Detection Rate                 0.2667
-Detection Prevalence           0.2667
-Balanced Accuracy              0.9000
+Sensitivity                    0.8000 # Sensitivity=TP/TP+FN 👉 의미 “실제 virginica 중에서 얼마나 잘 맞췄냐”
+Specificity                    1.0000 # Specificity=TN/TN+FP👉 의미 “virginica가 아닌 것들을 얼마나 잘 걸러냈냐”
+Pos Pred Value                 1.0000  # Precision=TP/TP+FP 👉 의미 “virginica라고 예측한 것 중 진짜 비율”
+Neg Pred Value                 0.9091  # Neg Pred Value (NPV)👉 음성이라고 예측한 것 중 진짜 음성 비율, NPV = TN/TN+FN
+Prevalence                     0.3333  # Prevalence 👉 데이터에서 실제 클래스 비율
+Detection Rate                 0.2667  # Detection Prevalence 👉 모델이 그 클래스를 얼마나 자주 예측했는지, TP/전체데이터
+Detection Prevalence           0.2667  # Detection Prevalence 👉 모델이 그 클래스를 얼마나 자주 예측했는지, TP+FP
+Balanced Accuracy              0.9000  # Balanced Accuracy 👉 Sensitivity + Specificity 평균, Sensitivity + Specificity/2
+	
+
