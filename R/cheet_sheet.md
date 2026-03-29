@@ -2023,3 +2023,39 @@ pred_class_logit <- ifelse(pred_prob_logit >= 0.5, 1, 0)
 accuracy_logit <- mean(pred_class_logit == df$Stay)
 accuracy_logit
 ```
+
+
+### KNN 분류
+```
+install.packages("class")
+install.packages("caret")
+install.packages("ggplot2")
+library(class)
+library(caret)
+library(ggplot2)
+
+data(iris)
+
+iris_sub <- iris[, c("Petal.Length", "Petal.Width", "Species")]
+
+set.seed(123) #시드 고정
+train_index <- createDataPartition(iris_sub$Species, p =0.8, list = FALSE)
+#80% Train, 20% Test으로 분할
+train_data <- iris_sub[train_index,] #훈련 데이터 (80%)
+test_data <- iris_sub[-train_index,] #훈련 데이터를 제외한 테스트 데이터(20%)
+
+입력값(x) / 라벨(Y) 분리: 사용할 특성인 입력값(x)와 정답 라벨(Y) 분리
+train_x <- train_data[,1:2] #훈련 데이터 (입력값)
+train_y <- train_data$Species # 훈련 데이터의 클래스 (정답 라벨)
+test_x <- test_data[,1:2] #테스트 데이터 (입력값)
+test_y <- test_data$Species #테스트 데이터의 클래스 (정답 라벨)
+
+# KNN 모델 (K=3)
+predicted_classes <- knn(train=train_x,
+                         test = test_x,
+                         cl = train_y,
+                         k = 3)
+
+# 모델평가
+confusionMatrix(predicted_classes, test_y)
+```
