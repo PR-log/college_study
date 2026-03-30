@@ -1,4 +1,4 @@
-<img width="547" height="332" alt="image" src="https://github.com/user-attachments/assets/babd89d0-5651-4c59-9935-e19089cdc42e" />#### 벡터 형성
+
 ```
 x <-  c(1,2,3)
 ```
@@ -14,6 +14,9 @@ v3에 1에서 101까지 3씩 증가하는 등차수열 벡터 생성
 ```
 v3 <-  seq(1,101,3)
 ```
+data_file <- choose.files()
+#data_file에 들어갈 파일 폴더에서 선택
+
 
 반복 벡터 생성
 ```
