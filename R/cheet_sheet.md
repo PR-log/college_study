@@ -2039,7 +2039,7 @@ data(iris)
 iris_sub <- iris[, c("Petal.Length", "Petal.Width", "Species")]
 
 set.seed(123) #시드 고정
-train_index <- createDataPartition(iris_sub$Species, p =0.8, list = FALSE)
+train_index <- createDataPartition(iris_sub$Species, p =0.8, list = FALSE) #list가 아니라 벡터로 변환
 #80% Train, 20% Test으로 분할
 train_data <- iris_sub[train_index,] #훈련 데이터 (80%)
 test_data <- iris_sub[-train_index,] #훈련 데이터를 제외한 테스트 데이터(20%)
