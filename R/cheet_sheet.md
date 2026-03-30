@@ -2069,36 +2069,36 @@ Prediction   setosa versicolor virginica
   versicolor      0         10         2
   virginica       0          0         8
 
-Overall Statistics
+Overall Statistics  
                                           
-               Accuracy : 0.9333          #전체 성능, 정확도
-                 95% CI : (0.7793, 0.9918) 
-    No Information Rate : 0.3333          #정보 없이 찍었을 때 성능
-    P-Value [Acc > NIR] : 8.747e-12       
+               Accuracy : 0.9333          #전체 성능, 정확도  
+                 95% CI : (0.7793, 0.9918)   
+    No Information Rate : 0.3333          #정보 없이 찍었을 때 성능  
+    P-Value [Acc > NIR] : 8.747e-12         
                                           
-                  Kappa : 0.9             #진짜 성능, 0.8이상이면 매우 좋음
+                  Kappa : 0.9             #진짜 성능, 0.8이상이면 매우 좋음  
                                           
- Mcnemar's Test P-Value : NA              
+ Mcnemar's Test P-Value : NA                
 
-Statistics by Class:
+Statistics by Class:  
 
-                     Class: setosa                             Class: versicolor
-Sensitivity                 1.0000      #전부 잘 맞춤           1.0000  #전부 잘 맞춤
-Specificity                 1.0000      #다른것도 잘 구분       0.9000  #일부 틀림
-Pos Pred Value              1.0000                             0.8333
-Neg Pred Value              1.0000                             1.0000
-Prevalence                  0.3333                             0.3333
-Detection Rate              0.3333                             0.3333
-Detection Prevalence        0.3333                             0.4000
-Balanced Accuracy           1.0000                             0.9500
-                     Class: virginica
-Sensitivity                    0.8000 # Sensitivity=TP/TP+FN 👉 의미 “실제 virginica 중에서 얼마나 잘 맞췄냐”
-Specificity                    1.0000 # Specificity=TN/TN+FP👉 의미 “virginica가 아닌 것들을 얼마나 잘 걸러냈냐”
-Pos Pred Value                 1.0000  # Precision=TP/TP+FP 👉 의미 “virginica라고 예측한 것 중 진짜 비율”
-Neg Pred Value                 0.9091  # Neg Pred Value (NPV)👉 음성이라고 예측한 것 중 진짜 음성 비율, NPV = TN/TN+FN
-Prevalence                     0.3333  # Prevalence 👉 데이터에서 실제 클래스 비율
-Detection Rate                 0.2667  # Detection Prevalence 👉 모델이 그 클래스를 얼마나 자주 예측했는지, TP/전체데이터
-Detection Prevalence           0.2667  # Detection Prevalence 👉 모델이 그 클래스를 얼마나 자주 예측했는지, TP+FP
-Balanced Accuracy              0.9000  # Balanced Accuracy 👉 Sensitivity + Specificity 평균, Sensitivity + Specificity/2
+                     Class: setosa                             Class: versicolor  
+Sensitivity                 1.0000      #전부 잘 맞춤           1.0000  #전부 잘 맞춤  
+Specificity                 1.0000      #다른것도 잘 구분       0.9000  #일부 틀림  
+Pos Pred Value              1.0000                             0.8333  
+Neg Pred Value              1.0000                             1.0000  
+Prevalence                  0.3333                             0.3333  
+Detection Rate              0.3333                             0.3333  
+Detection Prevalence        0.3333                             0.4000  
+Balanced Accuracy           1.0000                             0.9500  
+                     Class: virginica  
+Sensitivity                    0.8000 # Sensitivity=TP/TP+FN 👉 의미 “실제 virginica 중에서 얼마나 잘 맞췄냐”  
+Specificity                    1.0000 # Specificity=TN/TN+FP👉 의미 “virginica가 아닌 것들을 얼마나 잘 걸러냈냐”  
+Pos Pred Value                 1.0000  # Precision=TP/TP+FP 👉 의미 “virginica라고 예측한 것 중 진짜 비율”  
+Neg Pred Value                 0.9091  # Neg Pred Value (NPV)👉 음성이라고 예측한 것 중 진짜 음성 비율, NPV = TN/TN+FN  
+Prevalence                     0.3333  # Prevalence 👉 데이터에서 실제 클래스 비율  
+Detection Rate                 0.2667  # Detection Prevalence 👉 모델이 그 클래스를 얼마나 자주 예측했는지, TP/전체데이터  
+Detection Prevalence           0.2667  # Detection Prevalence 👉 모델이 그 클래스를 얼마나 자주 예측했는지, TP+FP  
+Balanced Accuracy              0.9000  # Balanced Accuracy 👉 Sensitivity + Specificity 평균, Sensitivity + Specificity/2  
 	
 
