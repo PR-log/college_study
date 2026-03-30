@@ -2100,5 +2100,59 @@ Detection Rate                 0.2667  # Detection Prevalence 👉 모델이 그
 Detection Prevalence           0.2667  # Detection Prevalence 👉 모델이 그 클래스를 얼마나 자주 예측했는지, TP+FP  
 Balanced Accuracy              0.9000  # Balanced Accuracy 👉 Sensitivity + Specificity 평균, Sensitivity + Specificity/2
 ```
+### 나이브 베이즈
+```
+install.packages('e1071')
+install.packages("pROC")
+library(e1071)
+library(pROC)
 
+spamdata <- read.csv("data/spam.csv")
+
+table(spamdata$spam)
+
+train_index <- createDataPartition(spamdata$spam, p =0.6, list = FALSE)
+train_data <- spamdata[train_index,]
+test_data <- spamdata[-train_index,]
+nrow(train_data);nrow(test_data)
+
+#spam 컬럼을 범주형(factor)로 변환 (예측값과의 일관성 유지)
+train_data$spam <- as.factor(train_data$spam)
+test_data$spam <- as.factor(test_data$spam)
+
+#나이브 베이즈 모델 학습
+spam_nb <- naiveBayes(spam ~ ., data= train_data)
+
+#모델 평가
+train_pred <- predict(spam_nb, newdata = train_data)
+train_pred <- factor(train_pred, levels = levels(train_data$spam)) #레벨 일치시키기
+confusionMatrix(train_pred, train_data$spam)
+
+Confusion Matrix and Statistics
+
+          Reference
+Prediction email spam
+     email   877   53
+     spam    796 1035
+                                          
+               Accuracy : 0.6925          
+                 95% CI : (0.6749, 0.7097)
+    No Information Rate : 0.6059          
+    P-Value [Acc > NIR] : < 2.2e-16       
+                                          
+                  Kappa : 0.4248          
+                                          
+ Mcnemar's Test P-Value : < 2.2e-16       
+                                          
+            Sensitivity : 0.5242      #email중 52%밖에 못잡음      
+            Specificity : 0.9513          
+         Pos Pred Value : 0.9430      # email이라고 하면 거의 다 맞음, 확실할때만 맞춤 그래서 많이 놓침    
+         Neg Pred Value : 0.5653          
+             Prevalence : 0.6059          
+         Detection Rate : 0.3176          
+   Detection Prevalence : 0.3368          
+      Balanced Accuracy : 0.7377          
+                                          
+       'Positive' Class : email   
+```
 
