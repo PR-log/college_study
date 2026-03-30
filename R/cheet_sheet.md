@@ -230,6 +230,22 @@ dim(exdata1) #행개수 ,열개수 ,행렬개수
 head(data)
 summary(data)
 
+### 데이터 확인
+data_2025 %>% dim()
+data_2025 %>% head()
+
+### 자료형 확인
+data_2025 %>% sapply(class)
+
+### 일시: character > date
+data_2025$일시 <- data_2025$일시 %>% as.Date("%Y-%m-%d")
+
+### 자료형 확인
+data_2025 %>% sapply(class)
+
+### 기초통계량
+data_2025 %>% summary()
+
 #변수명 바꾸기
 colnames(exdata1) <- c('yyyymmdd', 'station_num', 'station', 'ride_getoff', 'h0304', 'h0405', 'h0506', 'h0607')
 exdata1
