@@ -2153,6 +2153,18 @@ Prediction email spam
    Detection Prevalence : 0.3368          
       Balanced Accuracy : 0.7377          
                                           
-       'Positive' Class : email   
+       'Positive' Class : email
+
+#예측 확률 계산 (spam 확률만 추출)
+# type = "raw"를 통해 예측 결과를 원시 확률 값(email과 spam 클래스에 속할 확률)으로 반환
+# type = "rwa", : 클래스가 아닌 확률로 출력
+test_prob <- predict(spam_nb, newdata = test_data, type = "raw")[, "spam"]
+
+#ROC 곡선
+roc_curve <- roc(test_data$spam, test_prob) #ROC 곡선 생성
+plot(roc_curve,
+     xlab = "1-Specificity (False Positive Rate)",
+     ylab = "Sensitively (True Positive Rate)"
+     )
 ```
 
