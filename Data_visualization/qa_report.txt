@@ -1,0 +1,73 @@
+slide size: 13.33 x 7.5
+
+=== Slide 1  (pictures=0) ===
+  type=AUTO_SHAPE (1)
+  type=AUTO_SHAPE (1)
+  type=AUTO_SHAPE (1)
+  type=TEXT_BOX (17) | 데이터로 보는 프로 LoL / 무엇이 강한 선수·강한 팀을 만드는가 / 데이터시각화  ·  Oracle's Elixir (2024–2025)  ·  R / ggplot2
+  type=TEXT_BOX (17) | 이름 ○○○   |   학번 000000   |   데이터시각화
+
+=== Slide 2  (pictures=0) ===
+  type=TEXT_BOX (17) | 왜 이 주제인가
+  type=TEXT_BOX (17) | 저는 평소 롤을 즐겨 하고 / 프로 경기도 자주 봅니다. / “그냥 잘한다”는 느낌이 아니라, / 강한 선수의 차이를 실제 데이터로 / 확인해보고 싶어 이 주제를 골랐습니다.
+  type=AUTO_SHAPE (1)
+  type=TEXT_BOX (17) | “ / 강한 선수는 / 대체 뭐가 다를까?
+  type=TEXT_BOX (17) | 2
+
+=== Slide 3  (pictures=0) ===
+  type=TEXT_BOX (17) | 데이터 & 방법
+  type=AUTO_SHAPE (1)
+  type=TEXT_BOX (17) | 데이터 출처 / Oracle's Elixir
+  type=AUTO_SHAPE (1)
+  type=TEXT_BOX (17) | 분석 기간 / 2024 – 2025 시즌
+  type=AUTO_SHAPE (1)
+  type=TEXT_BOX (17) | 데이터 규모 / 선수 기록 25,350건
+  type=AUTO_SHAPE (1)
+  type=TEXT_BOX (17) | 분석 도구 / R · ggplot2
+  type=TEXT_BOX (17) | ※ 한계: 중국 LPL 정규시즌은 상세 지표가 공개되지 않아, 국제대회(MSI·Worlds) 경기만 포함됩니다.
+  type=TEXT_BOX (17) | 3
+
+=== Slide 4  (pictures=1) ===
+  type=TEXT_BOX (17) | ① 포지션마다 중요한 지표가 다르다
+  type=PICTURE (13)
+  type=AUTO_SHAPE (1)
+  type=TEXT_BOX (17) | 역할마다 다른 기준 / 바텀·미드는 딜량이 핵심, 서포터는 가장 낮음. 같은 ‘잘함’도 포지션마다 평가 기준이 달라야 한다.
+  type=TEXT_BOX (17) | 4
+
+=== Slide 5  (pictures=1) ===
+  type=TEXT_BOX (17) | ② 초반 우위가 승패를 가른다
+  type=PICTURE (13)
+  type=AUTO_SHAPE (1)
+  type=TEXT_BOX (17) | 15분이 결정적 / 이긴 경기(파랑)는 모든 라인에서 15분 골드가 앞선다. 후반 한방보다 초반 우위가 승패와 직결.
+  type=TEXT_BOX (17) | 5
+
+=== Slide 6  (pictures=1) ===
+  type=TEXT_BOX (17) | ③ 핵심 지표는 실제 승률로 이어진다
+  type=PICTURE (13)
+  type=TEXT_BOX (17) | 모든 포지션에서 우상향 — 평균 딜량이 높은 선수일수록 승률도 높다.
+  type=TEXT_BOX (17) | 6
+
+=== Slide 7  (pictures=2) ===
+  type=TEXT_BOX (17) | ④ 그래서, 최고의 미드는?
+  type=PICTURE (13)
+  type=PICTURE (13)
+  type=TEXT_BOX (17) | 딜량 1위 Chovy — 딜·CS·골드·시야·KDA 5개 지표를 모두 압도하는 ‘약점 없는 선수’.
+  type=TEXT_BOX (17) | 7
+
+=== Slide 8  (pictures=1) ===
+  type=TEXT_BOX (17) | ⑤ 게임은 더 빨라졌다
+  type=PICTURE (13)
+  type=AUTO_SHAPE (1)
+  type=TEXT_BOX (17) | 32분대로 단축·안정화 / 평균 경기 시간이 2016년 38분 정점 이후 줄어 2019년부터 32분 안팎. 패치가 ‘빠른 게임’을 지향.
+  type=TEXT_BOX (17) | 8
+
+=== Slide 9  (pictures=0) ===
+  type=TEXT_BOX (17) | 결론
+  type=TEXT_BOX (17) | 강한 선수 = 포지션 핵심 지표 상위  +  초반 우위 창출
+  type=AUTO_SHAPE (1)
+  type=TEXT_BOX (17) | 솔랭 유저  →  포지션별로 무엇을 연습할지 — 연습 우선순위
+  type=AUTO_SHAPE (1)
+  type=TEXT_BOX (17) | 팬  →  경기를 보는 새로운 데이터 관점
+  type=AUTO_SHAPE (1)
+  type=TEXT_BOX (17) | 코치·분석가  →  객관적인 선수 평가 기준(KPI)
+  type=TEXT_BOX (17) | 막연한 ‘잘한다’를 구체적인 지표로.
