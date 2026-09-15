@@ -5,10 +5,11 @@ wsl ubuntu micosoft store에서 다운로드
 # 우회로: 온라인 다운로드 없이 로컬로 엔진 켜기
 
 ### Step 1 — Windows 기능 2개를 DISM으로 직접 활성화 (관리자 PowerShell)
-
+```
 powershell
 dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
 dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+```
 
 이건 Store를 안 거치고 Windows에 내장된 기능을 켜는 거라 403을 우회함.
 
