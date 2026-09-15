@@ -26,6 +26,10 @@ wsl --update
 
 브라우저로 https://aka.ms/wsl2kernel 열면 Microsoft 공식 wsl_update_x64.msi가 받아짐 → 더블클릭 설치
 
+<img width="960" height="530" alt="image" src="https://github.com/user-attachments/assets/027db112-68b9-4838-897f-10b70e956116" />
+오류 발생 > 다시 windows 기능 2개 켜고 재부팅
+
+
 ### Step 4 — 기본값 WSL2로 지정
 
 powershell
