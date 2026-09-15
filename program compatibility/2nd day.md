@@ -29,6 +29,8 @@ wsl --update
 <img width="960" height="530" alt="image" src="https://github.com/user-attachments/assets/027db112-68b9-4838-897f-10b70e956116" />
 오류 발생 > 다시 windows 기능 2개 켜고 재부팅
 
+> 같은 오류 다시 발생
+> github.com/microsoft/WSL/releases 가서 최신.msi 설치
 
 ### Step 4 — 기본값 WSL2로 지정
 
@@ -37,6 +39,13 @@ wsl --set-default-version 2
 
 ### Step 5 — Ubuntu 실행 & 계정 생성
 시작 메뉴 → Ubuntu 클릭 → username(소문자)·password 입력. (비번은 화면에 안 보이는 게 정상)
+```
+Would you like to opt-in to platform metrics collection (Y/n)? To see an example of the data collected, enter 'e'.
+[Y/n/e]:
+```
+Canonical(Ubuntu 제작사)이 익명 사용 통계(telemetry)수집 허가,  
+개인정보는 수집 X 선택 자유
+
 
 ### Step 6 — 검증
 
@@ -44,3 +53,9 @@ powershell
 wsl -l -v
 
 Ubuntu의 VERSION이 2면 성공.
+
+### Step 7 - 필수업데이트
+```
+sudo apt update && sudo apt upgrade -y #시스템 업데이트
+sudo apt install -y python3-pip python3-venv build-essential git #개발 도구 최신화
+```
