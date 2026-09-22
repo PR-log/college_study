@@ -1,4 +1,4 @@
-우분투 서버에서 html.index 만들어서 웹사이트 생성
+우분투 서버에서 html.index 만들어서 웹사이트 생성  
 주소: https://203.247.62.32/~학번/index.html#stack
 
 ### 주차별 학습 dir 생성
