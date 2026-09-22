@@ -77,7 +77,9 @@ df.describe() #numeric columns only
 ```
 
 ### Python 스크립트 실행
-파이썬 프로그램 종료: exit()
-스크립트 실행: python ~/prog2026/week03/summary.py
+```
+exit() # 파이썬 프로그램 종료
+python ~/prog2026/week03/summary.py  #스크립트 실행
+```
 <img width="2150" height="432" alt="image" src="https://github.com/user-attachments/assets/0bff4b5a-1622-443a-ad2b-0bdce3b69c03" />
 
