@@ -14,8 +14,8 @@ mkdir ~/prog2026/week03
 ```
 cd /opt
 ```
-data share로 들어가서
-/opt/python-envs/global/bin/
-회사나 팀에서 공용으로 할때 사용하는 방법
-lib은 패키지 파일
-bin은 실행파일
+data share로 들어가서  
+/opt/python-envs/global/bin/  
+회사나 팀에서 공용으로 할때 사용하는 방법  
+lib은 패키지 파일  
+bin은 실행파일  
