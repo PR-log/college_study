@@ -143,3 +143,26 @@ df = pd.read_csv(data_file, encoding="euc-kr")
 
 print(df.describe())
 ```
+### filter_arg.py
+```
+import sys
+import pandas as pd
+
+### 데이터파일 경로
+data_file = "/opt/data_share/대전교통공사_시간대별 승하차인원_20260731.csv"
+
+### 파일 읽기
+df = pd.read_csv(data_file, encoding="euc-kr")
+
+### 날짜 필터
+selected_date = sys.argv[1]  #"2026-07-01"
+df_use = df.loc[df["날짜"] == selected_date, ["날짜", "역명", "구분"]]
+
+print(df_use)
+```
+### 스크립트 실행
+```
+/opt/python-envs/global/bin/python filter_arg.py 2026-07-01
+```
+### 결과
+<img width="1846" height="714" alt="image" src="https://github.com/user-attachments/assets/255b06eb-eff0-451a-86b7-ea8bae884d78" />
